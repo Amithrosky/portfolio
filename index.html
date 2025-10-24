@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amithrosky | Creative Developer</title>
+
+    <meta name="description" content="The personal portfolio of Amithrosky, a 6th-grade student and passionate developer exploring the world of code.">
+    <meta name="keywords" content="Amithrosky, portfolio, developer, python, html, css, javascript, student developer">
+
+    <link href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚀</text></svg>" rel="icon">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script src="https://unpkg.com/typed.js@2.0.16/dist/typed.umd.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        /*
+         * CUSTOM STYLES, THEME DEFINITION, AND ANIMATIONS
+         * "Nebula" (dark) and "Supernova" (light) themes with futuristic design.
+         */
+        :root {
+            /* --- NEBULA (DARK) --- */
+            --bg-dark: #0f0c29; /* Darker Space Purple */
+            --text-dark: #e0e7ff; /* Soft Blue-White */
+            --card-dark: rgba(30, 25, 70, 0.7); /* Deep Glass */
+            --primary-dark: #a78bfa; /* Violet/Lavender - Main Accent */
+            --secondary-dark: #4f46e5; /* Indigo - Secondary Accent */
+            --shadow-dark: rgba(79, 70, 229, 0.5);
+
+            /* --- SUPERNOVA (LIGHT) --- */
+            --bg-light: #ffffff;
+            --text-light: #1e293b; /* Dark Slate */
+            --card-light: #f1f5f9; /* Light Gray Blue */
+            --primary-light: #8b5cf6; /* Strong Violet */
+            --secondary-light: #10b981; /* Emerald Green */
+            --shadow-light: rgba(14, 165, 233, 0.1);
+        }
+
+        /* Base styles for theme variables */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-dark);
+            transition: background-color 0.5s, color 0.5s;
+        }
+
+        html.light body {
+            background-color: var(--bg-light);
+            color: var(--text-light);
+        }
+
+        /* Utility classes based on theme variables */
+        .bg-custom-bg { background-color: var(--bg-dark); }
+        .text-custom-text { color: var(--text-dark); }
+        .bg-custom-card { background-color: var(--card-dark); }
+        .text-primary-var { color: var(--primary-dark); }
+        .text-secondary-var { color: var(--secondary-dark); }
+        .border-primary-var { border-color: var(--primary-dark); }
+        .shadow-primary-var { box-shadow: 0 0 15px var(--shadow-dark); }
+
+        html.light .bg-custom-bg { background-color: var(--bg-light); }
+        html.light .text-custom-text { color: var(--text-light); }
+        html.light .bg-custom-card { background-color: var(--card-light); }
+        html.light .text-primary-var { color: var(--primary-light); }
+        html.light .text-secondary-var { color: var(--secondary-light); }
+        html.light .border-primary-var { border-color: var(--primary-light); }
+        html.light .shadow-primary-var { box-shadow: 0 0 10px var(--shadow-light); }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Neon Glow Effect for Text (Nebula exclusive) */
+        .text-glow {
+            text-shadow:
+                0 0 5px var(--primary-dark),
+                0 0 10px var(--primary-dark),
+                0 0 20px var(--secondary-dark);
+        }
+        html.light .text-glow {
+            text-shadow: none;
+            /* In Supernova, use strong color but no glow */
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            background-image: linear-gradient(90deg, var(--primary-light), var(--secondary-light));
+        }
+
+        /* Glassmorphism Card Effect (Nebula) / Clean Card (Supernova) */
+        .glass-card {
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 6px -1px var(--shadow-dark);
+            transition: all 0.3s;
+        }
+        html.light .glass-card {
+            border: 1px solid rgba(0,0,0,0.1);
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05);
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+        }
+
+        /* Animated Gradient Button */
+        .btn-primary {
+            background-image: linear-gradient(90deg, var(--primary-dark), var(--secondary-dark));
+            box-shadow: 0 4px 15px var(--shadow-dark);
+            transition: all 0.3s ease-out;
+        }
+        .btn-primary:hover {
+            opacity: 0.9;
+            transform: scale(1.02);
+        }
+        html.light .btn-primary {
+            background-image: linear-gradient(90deg, var(--primary-light), var(--secondary-light));
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3); /* Static shadow for light mode */
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-dark); }
+        ::-webkit-scrollbar-thumb { background: var(--primary-dark); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--secondary-dark); }
+        html.light ::-webkit-scrollbar-track { background: #f1f1f1; }
+        html.light ::-webkit-scrollbar-thumb { background: var(--primary-light); }
+        html.light ::-webkit-scrollbar-thumb:hover { background: var(--secondary-light); }
+
+        /* Fade-in animation for scroll reveals */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s, transform 0.8s;
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Cursor follower (Nebula exclusive) */
+        #cursor-glow {
+            position: fixed;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: var(--primary-dark);
+            filter: blur(20px);
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            transition: opacity 0.3s, background 0.5s;
+            z-index: 9999;
+            opacity: 0.7;
+        }
+        html.light #cursor-glow { display: none; }
+        body:hover #cursor-glow { opacity: 0.8; }
+    </style>
+
+    <script>
+        // IIFE to set initial theme based on localStorage or system preference
+        (function() {
+            try {
+                const savedTheme = localStorage.getItem('theme');
+                // Default to dark mode if no preference is saved (favoring Nebula)
+                const prefersDark = savedTheme ? (savedTheme === 'dark') : true;
+
+                if (prefersDark) {
+                    document.documentElement.classList.add('dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                }
+            } catch (e) {
+                console.error("Could not set initial theme:", e);
+            }
+        })();
+    </script>
+</head>
+
+<body class="bg-custom-bg text-custom-text font-sans antialiased overflow-x-hidden">
+    <div id="cursor-glow"></div>
+
+    <!-- --- HEADER / NAVIGATION --- -->
+    <header id="header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-custom-bg/80 backdrop-blur-md border-b border-primary-var/20">
+        <nav class="container mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center py-4">
+            <a href="#" class="text-2xl sm:text-3xl font-extrabold text-glow transition-colors duration-500">Amithrosky</a>
+
+            <!-- Desktop Navigation Links and Theme Toggle -->
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="#about" class="nav-link text-lg hover:text-primary-var transition-colors duration-300">About</a>
+                <a href="#skills" class="nav-link text-lg hover:text-primary-var transition-colors duration-300">Skills</a>
+                <a href="#projects" class="nav-link text-lg hover:text-primary-var transition-colors duration-300">Projects</a>
+
+                <!-- Direct Desktop Theme Toggle -->
+                <button id="theme-toggle-desktop" class="p-2 rounded-full hover:bg-primary-var/20 transition-all duration-300">
+                    <i id="theme-icon-desktop" data-lucide="sun" class="w-6 h-6 text-primary-var"></i>
+                </button>
+            </div>
+
+            <!-- Mobile Theme Toggle and Menu Button -->
+            <div class="md:hidden flex items-center space-x-2">
+                <!-- Direct Mobile Theme Toggle -->
+                <button id="theme-toggle-mobile" class="p-2 rounded-full hover:bg-primary-var/20 transition-all duration-300">
+                    <i id="theme-icon-mobile" data-lucide="sun" class="w-6 h-6 text-primary-var"></i>
+                </button>
+                <button id="mobile-menu-btn" class="p-2 hover:bg-primary-var/20 rounded-lg transition-colors">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="fixed top-0 left-0 w-full h-full bg-custom-bg z-[60] transform -translate-x-full transition-transform duration-300 ease-in-out md:hidden">
+        <div class="flex justify-between p-4 border-b border-primary-var/10">
+             <h2 class="text-2xl font-bold text-primary-var">Menu</h2>
+            <button id="mobile-menu-close-btn" class="p-2">
+                <i data-lucide="x" class="w-8 h-8"></i>
+            </button>
+        </div>
+        <div class="flex flex-col items-start justify-start p-8 space-y-6 h-full">
+            <a href="#about" class="mobile-nav-link text-3xl font-bold hover:text-primary-var transition-colors">About</a>
+            <a href="#skills" class="mobile-nav-link text-3xl font-bold hover:text-primary-var transition-colors">Skills</a>
+            <a href="#projects" class="mobile-nav-link text-3xl font-bold hover:text-primary-var transition-colors">Projects</a>
+            <!-- Removed the Settings section from the mobile menu -->
+        </div>
+    </div>
+
+
+    <div id="app-wrapper" class="container mx-auto px-4 sm:px-6 lg:px-8 pt-24">
+        <main>
+            <!-- --- HERO SECTION --- -->
+            <section class="text-center my-16 sm:my-24">
+                <h1 class="text-4xl sm:text-6xl md:text-7xl font-extrabold leading-tight">
+                    Hello, I'm <span class="text-glow">Amithrosky</span>
+                </h1>
+                <p class="text-lg sm:text-xl mt-4 max-w-2xl mx-auto">
+                    <span id="typed-subtitle"></span>
+                </p>
+                <div class="mt-8 flex justify-center items-center space-x-4">
+                    <a href="#projects" class="btn-primary text-white font-bold py-3 px-8 rounded-lg shadow-xl">
+                        Explore Projects
+                    </a>
+                    <a href="https://www.instagram.com/amithrosky" target="_blank" class="p-3 rounded-full border border-primary-var hover:bg-primary-var/20 transition-all duration-300 transform hover:scale-110">
+                        <i data-lucide="instagram"></i>
+                    </a>
+                    <a href="https://www.facebook.com/people/Amithrosky-BG/pfbid0LtN72qfP8utHTnhzKwcgbhv5j5NDrcZ1X3pnk4uT59aYq4XxLTQao6mpE4kCMHd4l/" target="_blank" class="p-3 rounded-full border border-primary-var hover:bg-primary-var/20 transition-all duration-300 transform hover:scale-110">
+                        <i data-lucide="facebook"></i>
+                    </a>
+                </div>
+            </section>
+
+            <!-- --- ABOUT SECTION --- -->
+            <section id="about" class="my-24 reveal">
+                <h2 class="text-3xl font-bold text-center mb-12">About Me</h2>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                    <div class="bg-custom-card glass-card rounded-xl p-8 hover:shadow-primary-var">
+                        <h3 class="text-2xl font-bold mb-4 flex items-center text-primary-var"><i data-lucide="user-round" class="mr-3"></i>Who I Am</h3>
+                        <p class="text-base leading-relaxed">
+                            I'm a curious and passionate student currently in the 6th grade with a huge love for technology. I discovered coding through Scratch and was immediately hooked! Since then, I've been on an exciting journey, learning different languages and exploring how tech can be used to create amazing things. Outside of coding, I enjoy video games, drawing, and figuring out how things work.
+                        </p>
+                    </div>
+                     <div class="bg-custom-card glass-card rounded-xl p-8 space-y-6 hover:shadow-primary-var">
+                        <div>
+                            <h3 class="text-2xl font-bold mb-4 flex items-center text-primary-var"><i data-lucide="rocket" class="mr-3"></i>My Goals</h3>
+                            <p>My mission is to become a versatile developer. I plan to dive deeper into game development with Python. I am currently trying to make a new AI assistant.</p>
+                        </div>
+                         <div>
+                            <h3 class="text-2xl font-bold mb-4 flex items-center text-primary-var"><i data-lucide="sparkles" class="mr-3"></i>My Philosophy</h3>
+                            <p>"Start small, dream big." I believe in building projects step-by-step, learning from mistakes, and never being afraid to try something new and challenging.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- --- SKILLS SECTION --- -->
+            <section id="skills" class="my-24 reveal">
+                <h2 class="text-3xl font-bold text-center mb-12">My Tech Toolbox</h2>
+                <div class="bg-custom-card glass-card rounded-xl p-8 hover:shadow-primary-var">
+                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+                        <div class="flex flex-col items-center text-center p-4 rounded-lg hover:bg-primary-var/10 transition-colors">
+                            <i data-lucide="code-2" class="w-12 h-12 text-primary-var"></i>
+                            <h4 class="font-bold mt-2 text-lg">Python</h4>
+                            <p class="text-sm text-custom-text/70">For logic & games</p>
+                        </div>
+                        <div class="flex flex-col items-center text-center p-4 rounded-lg hover:bg-primary-var/10 transition-colors">
+                            <i data-lucide="file-code" class="w-12 h-12 text-primary-var"></i>
+                            <h4 class="font-bold mt-2 text-lg">HTML</h4>
+                            <p class="text-sm text-custom-text/70">Web structure</p>
+                        </div>
+                         <div class="flex flex-col items-center text-center p-4 rounded-lg hover:bg-primary-var/10 transition-colors">
+                            <i data-lucide="paintbrush" class="w-12 h-12 text-primary-var"></i>
+                            <h4 class="font-bold mt-2 text-lg">CSS</h4>
+                            <p class="text-sm text-custom-text/70">Web styling</p>
+                        </div>
+                         <div class="flex flex-col items-center text-center p-4 rounded-lg hover:bg-primary-var/10 transition-colors">
+                            <i data-lucide="braces" class="w-12 h-12 text-primary-var"></i>
+                            <h4 class="font-bold mt-2 text-lg">JavaScript</h4>
+                            <p class="text-sm text-custom-text/70">Web interactivity</p>
+                        </div>
+                         <div class="flex flex-col items-center text-center p-4 rounded-lg hover:bg-primary-var/10 transition-colors">
+                            <i data-lucide="gamepad-2" class="w-12 h-12 text-primary-var"></i>
+                            <h4 class="font-bold mt-2 text-lg">Scratch</h4>
+                            <p class="text-sm text-custom-text/70">My starting point</p>
+                        </div>
+                        <div class="flex flex-col items-center text-center p-4 rounded-lg hover:bg-primary-var/10 transition-colors">
+                            <i data-lucide="code" class="w-12 h-12 text-primary-var"></i>
+                            <h4 class="font-bold mt-2 text-lg">Small Basic</h4>
+                            <p class="text-sm text-custom-text/70">Learning fundamentals</p>
+                        </div>
+                        <div class="flex flex-col items-center text-center p-4 rounded-lg hover:bg-primary-var/10 transition-colors">
+                            <i data-lucide="figma" class="w-12 h-12 text-primary-var"></i>
+                            <h4 class="font-bold mt-2 text-lg">Figma</h4>
+                            <p class="text-sm text-custom-text/70">For design ideas</p>
+                        </div>
+                        <div class="flex flex-col items-center text-center p-4 rounded-lg hover:bg-primary-var/10 transition-colors">
+                            <i data-lucide="github" class="w-12 h-12 text-primary-var"></i>
+                            <h4 class="font-bold mt-2 text-lg">Git & GitHub</h4>
+                            <p class="text-sm text-custom-text/70">Version control</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- --- PROJECTS SECTION --- -->
+            <section id="projects" class="my-24 reveal">
+                <h2 class="text-3xl font-bold text-center mb-12">Future Creations</h2>
+                <p class="text-center max-w-3xl mx-auto mb-12 text-lg text-custom-text/80">
+                    My focus is on mastering new skills. Here are the next generation of projects I'm planning to build in the future!
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="bg-custom-card glass-card rounded-xl p-6 flex flex-col hover:transform hover:-translate-y-2 transition-transform duration-300 border-l-4 border-primary-var">
+                        <h3 class="text-xl font-bold mb-2">Radius AI</h3>
+                        <p class="text-custom-text/80 flex-grow">I am thinking to make an AI assistant using React language. It may need some years to build because it will be a massive project...</p>
+                        <div class="mt-4">
+                            <span class="bg-primary-var/20 text-primary-var text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">React</span>
+                            <span class="bg-primary-var/20 text-primary-var text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">JavaScript</span>
+                        </div>
+                    </div>
+                     <div class="bg-custom-card glass-card rounded-xl p-6 flex flex-col hover:transform hover:-translate-y-2 transition-transform duration-300 border-l-4 border-secondary-var">
+                        <h3 class="text-xl font-bold mb-2">Tic Tac Toe</h3>
+                        <p class="text-custom-text/80 flex-grow">I will make a new Tic Tac Toe game with custom and new game modes which nobody had ever heard of...</p>
+                        <div class="mt-4">
+                            <span class="bg-secondary-var/20 text-secondary-var text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">Python</span>
+                            <span class="bg-secondary-var/20 text-secondary-var text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">Pygame</span>
+                        </div>
+                    </div>
+                     <div class="bg-custom-card glass-card rounded-xl p-6 flex flex-col hover:transform hover:-translate-y-2 transition-transform duration-300 border-l-4 border-primary-var">
+                        <h3 class="text-xl font-bold mb-2">Radius browser</h3>
+                        <p class="text-custom-text/80 flex-grow">A web browser with full of privacy and AI features where you can freely access internet without donating your personal or PC informations...</p>
+                        <div class="mt-4">
+                            <span class="bg-primary-var/20 text-primary-var text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">HTML</span>
+                            <span class="bg-primary-var/20 text-primary-var text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">CSS</span>
+                             <span class="bg-primary-var/20 text-primary-var text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">JavaScript</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- --- FOOTER --- -->
+        <footer class="text-center mt-16 py-8 border-t border-primary-var/20">
+             <div class="mb-4 flex justify-center items-center space-x-4">
+                <a href="https://www.instagram.com/amithrosky" target="_blank" class="p-2 rounded-full hover:bg-primary-var/20 transition-all duration-300">
+                    <i data-lucide="instagram"></i>
+                </a>
+                <a href="https://www.facebook.com/people/Amithrosky-BG/pfbid0LtN72qfP8utHTnhzKwcgbhv5j5NDrcZ1X3pnk4uT59aYq4XxLTQao6mpE4kCMHd4l/" target="_blank" class="p-2 rounded-full hover:bg-primary-var/20 transition-all duration-300">
+                    <i data-lucide="facebook"></i>
+                </a>
+                 <a href="https://github.com/amithrosky" target="_blank" class="p-2 rounded-full hover:bg-primary-var/20 transition-all duration-300">
+                    <i data-lucide="github"></i>
+                </a>
+            </div>
+            <p>&copy; 2025 Amithrosky. Programmed with a lot of patience.</p>
+        </footer>
+    </div>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top" class="fixed bottom-5 right-5 btn-primary p-3 rounded-full text-white shadow-lg hidden opacity-0 transition-opacity duration-300">
+        <i data-lucide="arrow-up" class="w-6 h-6"></i>
+    </button>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- ICON INITIALIZATION ---
+            lucide.createIcons();
+
+            // --- THEME TOGGLE LOGIC (Simplified) ---
+            const htmlEl = document.documentElement;
+            // Target the new direct toggle buttons
+            const themeToggleBtns = document.querySelectorAll('#theme-toggle-desktop, #theme-toggle-mobile');
+            const themeIcons = document.querySelectorAll('#theme-icon-desktop, #theme-icon-mobile');
+
+            // This function handles *all* UI updates (class, icon)
+            const updateThemeUI = (isDark) => {
+                htmlEl.classList.toggle('light', !isDark); // Supernova mode
+                htmlEl.classList.toggle('dark', isDark);  // Nebula mode
+
+                // If currently dark (Nebula), show Sun (to switch to light/Supernova)
+                // If currently light (Supernova), show Moon (to switch to dark/Nebula)
+                themeIcons.forEach(icon => {
+                    icon.setAttribute('data-lucide', isDark ? 'sun' : 'moon');
+                });
+                lucide.createIcons(); // Re-render icons with correct data-lucide attribute
+            };
+
+            // 1. Get the CURRENT theme (which was set by the <head> script)
+            let isDark = htmlEl.classList.contains('dark');
+
+            // 2. Set the initial ICON to match the theme
+            updateThemeUI(isDark);
+
+            // 3. Set up the click toggles
+            themeToggleBtns.forEach(toggle => {
+                toggle.addEventListener('click', () => {
+                    // Toggle the state
+                    isDark = !isDark;
+                    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+                    updateThemeUI(isDark); // Update class and icon
+                });
+            });
+
+
+            // --- MOBILE MENU ---
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenuCloseBtn = document.getElementById('mobile-menu-close-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+
+            mobileMenuBtn.addEventListener('click', () => mobileMenu.classList.remove('-translate-x-full'));
+            mobileMenuCloseBtn.addEventListener('click', () => mobileMenu.classList.add('-translate-x-full'));
+            mobileNavLinks.forEach(link => link.addEventListener('click', () => mobileMenu.classList.add('-translate-x-full')));
+
+            // --- HEADER SCROLL EFFECT ---
+            const header = document.getElementById('header');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    header.classList.add('shadow-xl');
+                } else {
+                    header.classList.remove('shadow-xl');
+                }
+            });
+
+            // --- SCROLL REVEAL ANIMATION ---
+            const revealElements = document.querySelectorAll('.reveal');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+            revealElements.forEach(el => observer.observe(el));
+
+            // --- BACK TO TOP BUTTON ---
+            const backToTopBtn = document.getElementById('back-to-top');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 300) {
+                    backToTopBtn.classList.remove('hidden', 'opacity-0');
+                    backToTopBtn.classList.add('opacity-100');
+                } else {
+                    backToTopBtn.classList.remove('opacity-100');
+                    backToTopBtn.classList.add('opacity-0');
+                    // Hide only after transition
+                    setTimeout(() => {
+                        if (backToTopBtn.classList.contains('opacity-0')) {
+                            backToTopBtn.classList.add('hidden');
+                        }
+                    }, 300);
+                }
+            });
+            backToTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+            // --- CURSOR FOLLOWER ---
+            const cursorGlow = document.getElementById('cursor-glow');
+            if (window.matchMedia('(pointer: fine)').matches && cursorGlow) { // Only run on devices with a mouse
+                window.addEventListener('mousemove', (e) => {
+                    cursorGlow.style.left = e.clientX + 'px';
+                    cursorGlow.style.top = e.clientY + 'px';
+                });
+            }
+
+             // --- TYPED.JS HERO SUBTITLE ---
+            new Typed('#typed-subtitle', {
+                strings: [`Hey, Welcome to my personal website !`, `Turning ideas into reality.`, `Exploring the universe of code.`, `Follow me on social meadia.`],
+                typeSpeed: 50,
+                backSpeed: 25,
+                backDelay: 1500,
+                loop: true,
+                smartBackspace: true
+            });
+        });
+    </script>
+</body>
+
+</html>
