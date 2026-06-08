@@ -4,12 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Amithrosky | Ultimate Creative Developer</title>
+    <title>Amithrosky | Portfolio</title>
 
     <meta name="description" content="The premium, interactive portfolio of Amithrosky, a student and creative developer.">
     <meta name="keywords" content="Amithrosky, portfolio, developer, python, html, css, javascript, kotlin, 3d, threejs">
 
-    <link href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>" rel="icon">
+    <link href="icon.png" rel="icon" type="image/png">
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -26,7 +26,7 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@400;600;700;800&family=Press+Start+2P&display=swap" rel="stylesheet">
 
     <style>
         :root {
@@ -60,24 +60,41 @@
             --accent-primary: #10b981;
             --accent-secondary: #3b82f6;
             --accent-tertiary: #059669;
+            --bg-base: #020a06;
         }
+
+        /* Hide standard scrollbar completely */
+        ::-webkit-scrollbar { display: none; }
+        * { -ms-overflow-style: none; scrollbar-width: none; }
 
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--bg-base);
             color: var(--text-main);
             overflow-x: hidden;
-            cursor: none; /* Custom cursor */
-            transition: background-color 0.5s ease;
+            width: 100vw;
+            cursor: none; 
+            transition: background-color 0.8s ease, --bg-base 0.8s ease;
+        }
+
+        /* Section Specific UI overrides */
+        body[data-active-section="gaming"] {
+            --bg-base: #0a0e0a;
+            --border-color: rgba(74, 222, 128, 0.2);
+        }
+        body[data-active-section="terminal"] {
+            --bg-base: #000000;
+        }
+        body[data-active-section="about"] {
+            --bg-base: #06060c;
         }
 
         h1, h2, h3, h4, h5, h6, .font-display {
             font-family: 'Space Grotesk', sans-serif;
         }
 
-        .font-mono {
-            font-family: 'Fira Code', monospace;
-        }
+        .font-mono { font-family: 'Fira Code', monospace; }
+        .font-pixel { font-family: 'Press Start 2P', cursive; }
 
         .noise-bg {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
@@ -93,24 +110,28 @@
         .gradient-orb {
             position: fixed; border-radius: 50%; filter: blur(100px); z-index: -1; opacity: 0.15;
             animation: float 20s infinite ease-in-out alternate;
+            transition: background 1s ease;
         }
         .orb-1 { top: 10%; left: 10%; width: 50vw; height: 50vw; background: var(--accent-primary); }
         .orb-2 { bottom: 10%; right: 10%; width: 40vw; height: 40vw; background: var(--accent-secondary); animation-delay: -10s;}
 
         @keyframes float { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(5%, 10%) scale(1.1); } }
 
-        /* Custom Cursor */
         #cursor-dot {
             width: 6px; height: 6px; background-color: var(--accent-primary);
-            border-radius: 50%; position: fixed; transform: translate(-50%, -50%);
-            pointer-events: none; z-index: 10000; transition: background-color 0.2s, transform 0.1s;
+            border-radius: 50%; position: fixed; top: 0; left: 0;
+            transform: translate3d(var(--cx, -100px), var(--cy, -100px), 0) translate(-50%, -50%);
+            pointer-events: none; z-index: 999999; 
+            transition: background-color 0.2s, opacity 0.3s;
         }
         #cursor-outline {
             width: 40px; height: 40px; border: 1px solid var(--accent-primary);
-            border-radius: 50%; position: fixed; transform: translate(-50%, -50%);
-            pointer-events: none; z-index: 9999; transition: width 0.2s, height 0.2s, background-color 0.2s, border-color 0.2s;
+            border-radius: 50%; position: fixed; top: 0; left: 0;
+            transform: translate3d(var(--ox, -100px), var(--oy, -100px), 0) translate(-50%, -50%);
+            pointer-events: none; z-index: 999998; 
+            transition: width 0.2s, height 0.2s, background-color 0.2s, border-color 0.2s, opacity 0.3s;
         }
-        body.hovering #cursor-dot { transform: translate(-50%, -50%) scale(0); }
+        body.hovering #cursor-dot { opacity: 0; transform: translate3d(var(--cx), var(--cy), 0) translate(-50%, -50%) scale(0); }
         body.hovering #cursor-outline {
             width: 60px; height: 60px; background-color: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(2px); border-color: transparent;
@@ -132,7 +153,6 @@
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
 
-        /* Premium Glow Cards */
         .glow-card-wrapper {
             position: relative; border-radius: 1.5rem; background: var(--bg-surface);
             border: 1px solid var(--border-color); overflow: hidden;
@@ -148,15 +168,14 @@
         .glow-card-wrapper:hover { transform: translateY(-5px); border-color: rgba(255,255,255,0.2); }
         .glow-card-content { position: relative; z-index: 2; height: 100%; background: var(--bg-base); margin: 1px; border-radius: calc(1.5rem - 1px); }
 
-        /* Infinite Marquee */
-        .marquee-container { overflow: hidden; white-space: nowrap; position: relative; display: flex; width: 100vw; margin-left: -50vw; left: 50%; border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); background: var(--bg-surface); padding: 1rem 0; }
+        .marquee-container { overflow: hidden; white-space: nowrap; position: relative; display: flex; width: 100vw; left: 50%; transform: translateX(-50%) rotate(-1deg) scale(1.05); border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); background: var(--bg-surface); padding: 1rem 0; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); }
         .marquee-content { display: flex; animation: marquee 30s linear infinite; }
         .marquee-content span { margin: 0 2rem; font-family: 'Space Grotesk', sans-serif; font-size: 2rem; font-weight: 700; color: transparent; -webkit-text-stroke: 1px rgba(255,255,255,0.2); text-transform: uppercase; }
         .marquee-content span.solid { color: var(--text-main); -webkit-text-stroke: 0; }
         @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
-        /* Bento Grid */
         .bento-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 1rem; grid-auto-rows: 130px; }
+        @media (max-width: 640px) { .bento-grid { grid-template-columns: repeat(2, 1fr); } }
         .bento-item { background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 1rem; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: all 0.3s; position: relative; overflow: hidden; }
         .bento-item::after { content:''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent, rgba(255,255,255,0.05)); opacity: 0; transition: opacity 0.3s; }
         .bento-item:hover { transform: translateY(-5px) scale(1.02); border-color: var(--accent-primary); box-shadow: 0 10px 30px -10px var(--accent-primary); z-index: 10; }
@@ -164,23 +183,38 @@
         .bento-wide { grid-column: span 2; }
         .bento-tall { grid-row: span 2; }
 
-        /* Terminal Component */
         .terminal-window { background: #0a0a0f; border: 1px solid var(--border-color); border-radius: 0.75rem; overflow: hidden; font-family: 'Fira Code', monospace; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
         .terminal-header { background: #1a1a24; padding: 0.5rem 1rem; display: flex; align-items: center; border-bottom: 1px solid var(--border-color); }
         .terminal-dots span { width: 12px; height: 12px; border-radius: 50%; display: inline-block; margin-right: 6px; }
-        .terminal-body { padding: 1.5rem; height: 300px; overflow-y: auto; font-size: 0.9rem; color: #a9b1d6; }
+        .terminal-body { padding: 1.5rem; height: 350px; overflow-y: auto; font-size: 0.9rem; color: #a9b1d6; scrollbar-width: none; }
+        .terminal-body::-webkit-scrollbar { display: none; }
         .terminal-input-line { display: flex; align-items: center; margin-top: 0.5rem; }
         .terminal-input { background: transparent; border: none; outline: none; color: #7aa2f7; width: 100%; font-family: 'Fira Code', monospace; margin-left: 0.5rem; }
         
-        /* Scroll Reveal */
+        .minecraft-block {
+            background-color: #7b7b7b;
+            box-shadow: inset -4px -4px 0px 0px rgba(0,0,0,0.5), inset 4px 4px 0px 0px rgba(255,255,255,0.5);
+            border: 2px solid #000;
+            color: white;
+            text-shadow: 2px 2px 0px #000;
+            transition: transform 0.2s;
+        }
+        .minecraft-block:hover { transform: scale(1.05); }
+
+        .popup-menu {
+            opacity: 0; transform: translateY(-10px); pointer-events: none;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+        .popup-menu.active {
+            opacity: 1; transform: translateY(0); pointer-events: auto;
+        }
+
         .reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
         .reveal.active { opacity: 1; transform: translateY(0); }
         .delay-100 { transition-delay: 100ms; } .delay-200 { transition-delay: 200ms; } .delay-300 { transition-delay: 300ms; }
 
-        /* Progress Bar */
-        #scroll-progress { position: fixed; top: 0; left: 0; height: 3px; background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary)); width: 0%; z-index: 10000; transition: width 0.1s; }
+        #scroll-progress { position: fixed; top: 0; left: 0; height: 3px; background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary)); width: 0%; z-index: 100000; transition: width 0.1s; }
 
-        /* Buttons */
         .btn-premium {
             position: relative; display: inline-flex; justify-content: center; align-items: center;
             padding: 1rem 2.5rem; background: linear-gradient(135deg, rgba(255,255,255,0.05), transparent);
@@ -195,29 +229,34 @@
         .btn-premium:hover::before { left: 100%; }
         .btn-premium:hover { border-color: var(--accent-primary); box-shadow: 0 0 20px rgba(99, 102, 241, 0.2); transform: scale(1.05); }
 
-        /* Preloader */
         #preloader { position: fixed; inset: 0; background: var(--bg-base); z-index: 100000; display: flex; justify-content: center; align-items: center; flex-direction: column; transition: opacity 0.8s, visibility 0.8s; }
         .loader-text { font-family: 'Space Grotesk', sans-serif; font-size: 2rem; font-weight: 700; background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: pulse 1.5s infinite alternate; }
         
-        /* Floating Music Widget */
-        .status-widget { position: fixed; bottom: 30px; right: 30px; background: var(--bg-surface); border: 1px solid var(--border-color); backdrop-filter: blur(10px); border-radius: 50px; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 10px; z-index: 50; transition: transform 0.3s, background 0.3s; cursor: none;}
-        .status-widget:hover { background: var(--bg-surface-hover); transform: translateY(-5px); border-color: var(--accent-primary); }
-        .music-bars { display: flex; gap: 3px; height: 15px; align-items: flex-end; }
-        .music-bars span { width: 3px; background: var(--accent-primary); border-radius: 3px; animation: bounce 1s infinite alternate; }
-        .music-bars span:nth-child(2) { animation-delay: 0.2s; }
-        .music-bars span:nth-child(3) { animation-delay: 0.4s; }
+        .social-sidebar {
+            position: fixed; left: 0; top: 50%; transform: translateY(-50%); z-index: 50;
+            display: flex; flex-direction: column; gap: 0.5rem; padding: 1rem;
+        }
+        @media (max-width: 1024px) {
+            .social-sidebar {
+                top: auto; bottom: 0; left: 50%; transform: translateX(-50%);
+                flex-direction: row; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px);
+                border-top-left-radius: 1rem; border-top-right-radius: 1rem;
+                padding: 0.75rem 1.5rem; border: 1px solid var(--border-color); border-bottom: none;
+            }
+        }
+        .social-link {
+            width: 45px; height: 45px; border-radius: 50%; bg-surface; border: 1px solid var(--border-color);
+            display: flex; align-items: center; justify-content: center; color: var(--text-muted);
+            transition: all 0.3s ease; background: var(--bg-surface);
+        }
+        .social-link:hover { color: white; border-color: var(--accent-primary); transform: scale(1.1) translateX(5px); background: var(--accent-primary); }
+        @media (max-width: 1024px) { .social-link:hover { transform: scale(1.1) translateY(-5px); } }
 
-        @keyframes bounce { 0% { height: 4px; } 100% { height: 15px; } }
         @keyframes pulse { 0% { opacity: 0.6; transform: scale(0.98); } 100% { opacity: 1; transform: scale(1.02); } }
-
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: var(--bg-base); }
-        ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--accent-primary); }
     </style>
 </head>
 
-<body class="antialiased selection:bg-indigo-500/30 selection:text-indigo-200">
+<body class="antialiased selection:bg-indigo-500/30 selection:text-indigo-200" data-active-section="hero">
     <div id="scroll-progress"></div>
     
     <div id="preloader">
@@ -228,50 +267,69 @@
         </div>
     </div>
 
-    <!-- Backgrounds -->
     <div class="noise-bg"></div>
     <div id="webgl-container"></div>
     <div class="gradient-orb orb-1"></div>
     <div class="gradient-orb orb-2"></div>
 
-    <!-- Custom Cursor Elements -->
     <div id="cursor-dot" class="hidden md:block"></div>
     <div id="cursor-outline" class="hidden md:block"></div>
 
-    <!-- Floating Status Widget -->
-    <div class="status-widget hover-trigger interactive-element" title="Audio Status">
-        <div class="music-bars"><span></span><span></span><span></span></div>
-        <div class="text-xs font-mono text-gray-300 flex flex-col">
-            <span class="text-[10px] text-gray-500 uppercase tracking-widest">Status</span>
-            <span id="audio-status-text">Audio Ready (Click anywhere)</span>
-        </div>
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="fixed bottom-24 right-6 z-[60] flex flex-col gap-3 pointer-events-none"></div>
+
+    <!-- Permanent Social Links -->
+    <div class="social-sidebar hidden sm:flex">
+        <a href="https://github.com/amithrosky" target="_blank" class="social-link hover-trigger interactive-element" title="GitHub"><i class="fa-brands fa-github text-xl"></i></a>
+        <a href="https://x.com/amithrosky" target="_blank" class="social-link hover-trigger interactive-element" title="X (Twitter)"><i class="fa-brands fa-x-twitter text-xl"></i></a>
+        <a href="https://www.instagram.com/amithrosky" target="_blank" class="social-link hover-trigger interactive-element" title="Instagram"><i class="fa-brands fa-instagram text-xl"></i></a>
+        <a href="https://www.facebook.com" target="_blank" class="social-link hover-trigger interactive-element" title="Facebook"><i class="fa-brands fa-facebook text-xl"></i></a>
+        <a href="https://www.pinterest.com" target="_blank" class="social-link hover-trigger interactive-element" title="Pinterest"><i class="fa-brands fa-pinterest text-xl"></i></a>
     </div>
 
-    <!-- Toast Notification Container -->
-    <div id="toast-container" class="fixed bottom-30 right-6 z-50 flex flex-col gap-3 pointer-events-none"></div>
-
-    <header class="fixed top-0 left-0 right-0 z-50 py-4 px-6 md:px-12 backdrop-blur-md bg-black/20 border-b border-white/5 transition-all duration-300" id="navbar">
+    <header class="fixed top-0 left-0 right-0 z-[60] py-4 px-6 md:px-12 backdrop-blur-md bg-black/40 border-b border-white/5 transition-all duration-300" id="navbar">
         <nav class="flex justify-between items-center max-w-7xl mx-auto">
-            <a href="#" class="font-display text-2xl font-bold tracking-tighter hover-trigger interactive-element text-white flex items-center gap-2">
-                <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-pink-500 flex items-center justify-center text-sm">A</div>
+            <a href="#" class="font-display text-xl md:text-2xl font-bold tracking-tighter hover-trigger interactive-element text-white flex items-center gap-3">
+                <img src="image_a528ff.png" alt="Amithrosky Logo" class="w-8 h-8 md:w-10 md:h-10 rounded-lg object-cover shadow-lg border border-white/10">
                 <span class="hidden sm:block">Amithrosky</span>
             </a>
             
             <div class="hidden lg:flex items-center space-x-1 border border-white/10 rounded-full px-2 py-1 bg-white/5">
                 <a href="#about" class="px-4 py-2 text-sm font-medium text-gray-400 hover:text-white rounded-full hover:bg-white/10 transition-colors hover-trigger interactive-element">About</a>
-                <a href="#journey" class="px-4 py-2 text-sm font-medium text-gray-400 hover:text-white rounded-full hover:bg-white/10 transition-colors hover-trigger interactive-element">Journey</a>
-                <a href="#skills" class="px-4 py-2 text-sm font-medium text-gray-400 hover:text-white rounded-full hover:bg-white/10 transition-colors hover-trigger interactive-element">Skills</a>
+                <a href="#services" class="px-4 py-2 text-sm font-medium text-gray-400 hover:text-white rounded-full hover:bg-white/10 transition-colors hover-trigger interactive-element">Services</a>
                 <a href="#work" class="px-4 py-2 text-sm font-medium text-gray-400 hover:text-white rounded-full hover:bg-white/10 transition-colors hover-trigger interactive-element">Work</a>
+                <a href="#gaming" class="px-4 py-2 text-sm font-medium text-gray-400 hover:text-white rounded-full hover:bg-white/10 transition-colors hover-trigger interactive-element">Gaming</a>
                 <a href="#terminal" class="px-4 py-2 text-sm font-medium text-gray-400 hover:text-white rounded-full hover:bg-white/10 transition-colors hover-trigger interactive-element">Terminal</a>
             </div>
 
-            <div class="flex items-center gap-4">
-                <!-- Theme Toggler -->
-                <button id="theme-toggle" class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition-all hover-trigger interactive-element" title="Change Theme">
-                    <i data-lucide="palette" class="w-4 h-4"></i>
-                </button>
-                <a href="#contact" class="hidden md:inline-flex items-center justify-center px-5 py-2 text-sm font-semibold text-white bg-white/10 border border-white/20 rounded-full hover:bg-white/20 transition-all hover-trigger interactive-element">
-                    Let's Talk
+            <div class="flex items-center gap-2 md:gap-4">
+                <!-- Audio Toggle Dropdown -->
+                <div class="relative group">
+                    <button id="audio-toggle-btn" class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition-all hover-trigger interactive-element" title="Audio Settings">
+                        <i data-lucide="volume-x" id="audio-icon" class="w-4 h-4"></i>
+                    </button>
+                    <div id="audio-dropdown" class="popup-menu absolute top-14 right-0 bg-[#0a0a0f] border border-white/10 rounded-xl p-2 flex-col gap-1 w-32 shadow-2xl z-50">
+                        <div class="text-xs text-gray-500 font-mono px-2 mb-1 uppercase">Audio</div>
+                        <button class="audio-select-btn w-full text-left px-3 py-2 text-sm text-emerald-400 hover:bg-white/10 rounded-lg flex justify-between items-center" data-val="on">On <i data-lucide="volume-2" class="w-3 h-3"></i></button>
+                        <button class="audio-select-btn w-full text-left px-3 py-2 text-sm text-red-400 hover:bg-white/10 rounded-lg flex justify-between items-center" data-val="off">Off <i data-lucide="volume-x" class="w-3 h-3"></i></button>
+                    </div>
+                </div>
+
+                <!-- Theme Toggle Dropdown -->
+                <div class="relative group">
+                    <button id="theme-toggle-btn" class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition-all hover-trigger interactive-element" title="Change Theme">
+                        <i data-lucide="palette" class="w-4 h-4"></i>
+                    </button>
+                    <div id="theme-dropdown" class="popup-menu absolute top-14 right-0 bg-[#0a0a0f] border border-white/10 rounded-xl p-2 flex-col gap-1 w-36 shadow-2xl z-50">
+                        <div class="text-xs text-gray-500 font-mono px-2 mb-1 uppercase">Theme</div>
+                        <button class="theme-select-btn w-full text-left px-3 py-2 text-sm text-indigo-300 hover:text-white hover:bg-white/10 rounded-lg" data-theme-val="default">Default</button>
+                        <button class="theme-select-btn w-full text-left px-3 py-2 text-sm text-[#00ff9f] hover:text-white hover:bg-white/10 rounded-lg" data-theme-val="cyberpunk">Cyberpunk</button>
+                        <button class="theme-select-btn w-full text-left px-3 py-2 text-sm text-emerald-400 hover:text-white hover:bg-white/10 rounded-lg" data-theme-val="emerald">Emerald</button>
+                    </div>
+                </div>
+
+                <a href="#terminal" class="hidden md:inline-flex items-center justify-center px-5 py-2 text-sm font-semibold text-white bg-white/10 border border-white/20 rounded-full hover:bg-white/20 transition-all hover-trigger interactive-element">
+                    Terminal
                 </a>
                 <button id="mobile-menu-btn" class="lg:hidden text-white hover-trigger interactive-element p-2">
                     <i data-lucide="menu" class="w-6 h-6"></i>
@@ -281,21 +339,21 @@
     </header>
 
     <!-- Mobile Menu -->
-    <div id="mobile-menu" class="fixed inset-0 bg-[#020204]/98 backdrop-blur-2xl z-[60] flex flex-col justify-center items-center transform translate-y-full transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]">
+    <div id="mobile-menu" class="fixed inset-0 bg-[#020204]/98 backdrop-blur-2xl z-[70] flex flex-col justify-center items-center transform translate-y-full transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]">
         <button id="close-menu-btn" class="absolute top-8 right-8 text-white p-2 interactive-element hover-trigger">
             <i data-lucide="x" class="w-8 h-8"></i>
         </button>
         <div class="flex flex-col space-y-6 text-center w-full px-6">
             <a href="#about" class="mobile-link font-display text-4xl text-gray-400 hover:text-white transition-colors border-b border-white/10 pb-4">About</a>
-            <a href="#journey" class="mobile-link font-display text-4xl text-gray-400 hover:text-white transition-colors border-b border-white/10 pb-4">Journey</a>
-            <a href="#skills" class="mobile-link font-display text-4xl text-gray-400 hover:text-white transition-colors border-b border-white/10 pb-4">Skills</a>
+            <a href="#services" class="mobile-link font-display text-4xl text-gray-400 hover:text-white transition-colors border-b border-white/10 pb-4">Services</a>
             <a href="#work" class="mobile-link font-display text-4xl text-gray-400 hover:text-white transition-colors border-b border-white/10 pb-4">Work</a>
-            <a href="#contact" class="mobile-link font-display text-4xl text-indigo-400 hover:text-indigo-300 transition-colors mt-4">Contact Me</a>
+            <a href="#gaming" class="mobile-link font-display text-4xl text-gray-400 hover:text-white transition-colors border-b border-white/10 pb-4">Gaming Hub</a>
+            <a href="#terminal" class="mobile-link font-display text-4xl text-indigo-400 hover:text-indigo-300 transition-colors mt-4">Terminal & Contact</a>
         </div>
     </div>
 
-    <main class="relative z-10 pt-20">
-        <section class="min-h-[90vh] flex flex-col justify-center items-center px-6 relative overflow-hidden">
+    <main class="relative z-10 pt-20 overflow-x-hidden">
+        <section id="hero" class="min-h-[90vh] flex flex-col justify-center items-center px-6 relative w-full">
             <div class="text-center w-full max-w-6xl mx-auto z-10 reveal active">
                 
                 <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-indigo-500/30 bg-indigo-500/10 mb-8 backdrop-blur-md">
@@ -313,7 +371,7 @@
                     <span id="typed-subtitle" class="text-gradient-accent font-semibold"></span>
                 </div>
                 
-                <p class="max-w-2xl mx-auto text-gray-400 text-base md:text-lg mb-12 leading-relaxed">
+                <p class="max-w-2xl mx-auto text-gray-400 text-base md:text-lg mb-12 leading-relaxed px-4">
                     Bridging the gap between imagination and reality through code. I engineer digital experiences that are visually striking, highly functional, and built for the future.
                 </p>
 
@@ -321,51 +379,30 @@
                     <a href="#work" class="btn-premium hover-trigger interactive-element">
                         Explore Work <i data-lucide="arrow-down-right" class="ml-2 w-5 h-5"></i>
                     </a>
-                    <a href="https://github.com/amithrosky" target="_blank" class="flex items-center gap-3 text-gray-400 hover:text-white transition-colors hover-trigger interactive-element font-medium border-b border-transparent hover:border-white pb-1">
-                        <i class="fa-brands fa-github text-xl"></i> Github Profile
+                    <a href="#terminal" class="flex items-center gap-3 text-gray-400 hover:text-white transition-colors hover-trigger interactive-element font-medium border-b border-transparent hover:border-white pb-1">
+                        <i data-lucide="terminal" class="w-5 h-5"></i> Access Terminal
                     </a>
                 </div>
             </div>
             
             <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-2 opacity-50 text-xs font-mono uppercase tracking-widest">
-                <span>Scroll to explore</span>
-                <i data-lucide="mouse" class="w-5 h-5 animate-bounce"></i>
+               
             </div>
         </section>
 
         <!-- Infinite Tech Marquee -->
-        <div class="marquee-container my-12 rotate-[-1deg] scale-105 shadow-2xl">
-            <div class="marquee-content">
-                <span>Python</span><span class="solid">JavaScript</span><span>React</span><span class="solid">HTML5</span><span>CSS3</span><span class="solid">Kotlin</span><span>Node.js</span><span class="solid">Three.js</span><span>UI/UX</span><span class="solid">Web Dev</span>
-                <!-- Duplicate for seamless loop -->
-                <span>Python</span><span class="solid">JavaScript</span><span>React</span><span class="solid">HTML5</span><span>CSS3</span><span class="solid">Kotlin</span><span>Node.js</span><span class="solid">Three.js</span><span>UI/UX</span><span class="solid">Web Dev</span>
+        <div class="w-full overflow-hidden">
+            <div class="marquee-container my-12">
+                <div class="marquee-content">
+                    <span>Python</span><span class="solid">JavaScript</span><span>React</span><span class="solid">HTML5</span><span>CSS3</span><span class="solid">Kotlin</span><span>Node.js</span><span class="solid">Three.js</span><span>UI/UX</span><span class="solid">Web Dev</span>
+                    <!-- Duplicate for seamless loop -->
+                    <span>Python</span><span class="solid">JavaScript</span><span>React</span><span class="solid">HTML5</span><span>CSS3</span><span class="solid">Kotlin</span><span>Node.js</span><span class="solid">Three.js</span><span>UI/UX</span><span class="solid">Web Dev</span>
+                </div>
             </div>
         </div>
 
-        <!-- Stats Section -->
-        <section class="py-16 px-6 max-w-7xl mx-auto">
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 glass-panel p-8 md:p-12 reveal">
-                <div class="text-center">
-                    <div class="text-4xl md:text-5xl font-display font-bold text-white mb-2 counter" data-target="30">0</div>
-                    <div class="text-xs text-gray-400 font-mono uppercase tracking-widest">Projects Built</div>
-                </div>
-                <div class="text-center">
-                    <div class="text-4xl md:text-5xl font-display font-bold text-white mb-2 counter" data-target="5000">0</div>
-                    <div class="text-xs text-gray-400 font-mono uppercase tracking-widest">Lines of Code</div>
-                </div>
-                <div class="text-center">
-                    <div class="text-4xl md:text-5xl font-display font-bold text-white mb-2 counter" data-target="15">0</div>
-                    <div class="text-xs text-gray-400 font-mono uppercase tracking-widest">Technologies</div>
-                </div>
-                <div class="text-center">
-                    <div class="text-4xl md:text-5xl font-display font-bold text-white mb-2 counter" data-target="365">0</div>
-                    <div class="text-xs text-gray-400 font-mono uppercase tracking-widest">Days Coding</div>
-                </div>
-            </div>
-        </section>
-
         <!-- About Section -->
-        <section id="about" class="py-24 px-6 md:px-12 max-w-7xl mx-auto">
+        <section id="about" class="py-24 px-6 md:px-12 max-w-7xl mx-auto w-full">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                 <div class="reveal">
                     <h2 class="text-sm text-indigo-400 font-mono tracking-widest uppercase mb-4">// 01. Who I Am</h2>
@@ -373,28 +410,21 @@
                     
                     <div class="space-y-6 text-gray-400 text-lg leading-relaxed">
                         <p>I am a passionate student currently in the <span id="inline-grade" class="text-white font-medium"></span>, with an insatiable curiosity for how technology shapes our world.</p>
-                        <p>What started as simple drag-and-drop programming in Scratch evolved into a deep dive into complex algorithms, app development, and interactive web environments.</p>
+                        <p>What started as simple visual programming evolved into a deep dive into complex algorithms, app development, and immersive interactive environments.</p>
                         <p>My philosophy is simple: <strong>"Build things that matter, and make them look incredible."</strong> I don't just write code; I design experiences.</p>
-                    </div>
-
-                    <div class="mt-10 flex gap-4">
-                        <a href="#contact" class="px-6 py-3 bg-white text-black font-semibold rounded-full hover:bg-gray-200 transition-colors hover-trigger interactive-element">Contact Me</a>
-                        <a href="https://github.com/amithrosky" target="_blank" class="px-6 py-3 border border-white/20 text-white font-semibold rounded-full hover:bg-white/10 transition-colors hover-trigger interactive-element">View Resume</a>
                     </div>
                 </div>
                 
-                <div class="relative reveal delay-100">
+                <div class="relative reveal delay-100 w-full flex justify-center">
                     <!-- Stylized "Card" / Profile Representation -->
-                    <div class="aspect-square max-w-md mx-auto relative group">
+                    <div class="aspect-square w-full max-w-sm relative group">
                         <div class="absolute inset-0 bg-gradient-to-tr from-indigo-500 to-pink-500 rounded-3xl transform rotate-6 opacity-50 group-hover:rotate-12 transition-transform duration-500 blur-sm"></div>
                         <div class="absolute inset-0 bg-[#0a0a0f] border border-white/10 rounded-3xl transform -rotate-3 group-hover:rotate-0 transition-transform duration-500 flex flex-col justify-between p-8 overflow-hidden z-10">
                             <div class="absolute top-0 right-0 w-64 h-64 bg-indigo-500/20 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2"></div>
                             
                             <div>
-                                <div class="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center border border-white/10 mb-6">
-                                    <i data-lucide="user" class="w-8 h-8 text-white"></i>
-                                </div>
-                                <h4 class="text-2xl font-display font-bold text-white mb-2">Amithrosky</h4>
+                                <img src="image_a528ff.png" alt="Profile Logo" class="w-20 h-20 rounded-2xl border border-white/20 mb-6 object-cover shadow-2xl">
+                                <h4 class="text-2xl font-display font-bold text-white mb-1">Amithrosky</h4>
                                 <p class="text-indigo-400 font-mono text-sm">Full-Stack Explorer</p>
                             </div>
 
@@ -418,149 +448,46 @@
             </div>
         </section>
 
-        <!-- Journey / Timeline Section -->
-        <section id="journey" class="py-24 px-6 md:px-12 max-w-4xl mx-auto border-t border-white/5">
+        <!-- Services Section -->
+        <section id="services" class="py-24 px-6 md:px-12 max-w-7xl mx-auto border-t border-white/5 w-full">
             <div class="text-center mb-16 reveal">
-                <h2 class="text-sm text-indigo-400 font-mono tracking-widest uppercase mb-4">// 02. The Journey</h2>
-                <h3 class="font-display text-4xl md:text-5xl font-bold text-white">Evolution of a Dev</h3>
+                <h2 class="text-sm text-pink-400 font-mono tracking-widest uppercase mb-4">// 02. What I Do</h2>
+                <h3 class="font-display text-4xl md:text-5xl font-bold text-white mb-4">Digital Solutions</h3>
+                <p class="text-gray-400 max-w-2xl mx-auto">Delivering high-performance code and stunning designs tailored to solve real problems.</p>
             </div>
 
-            <div class="relative border-l-2 border-white/10 pl-8 ml-4 md:ml-0 md:pl-0 md:border-l-0 space-y-12">
-                <!-- Central line for desktop -->
-                <div class="hidden md:block absolute left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-indigo-500/50 via-pink-500/50 to-transparent transform -translate-x-1/2"></div>
-
-                <!-- Timeline Item 1 -->
-                <div class="relative md:flex md:justify-between md:items-center w-full reveal group">
-                    <div class="absolute -left-[41px] md:left-1/2 md:-ml-3 w-6 h-6 rounded-full bg-[#0a0a0f] border-2 border-indigo-500 flex items-center justify-center z-10 group-hover:scale-125 transition-transform group-hover:bg-indigo-500 group-hover:shadow-[0_0_15px_#6366f1]"></div>
-                    <div class="md:w-[45%] text-left md:text-right pr-0 md:pr-8 mb-4 md:mb-0">
-                        <h4 class="text-2xl font-bold text-white font-display">The Spark</h4>
-                        <p class="text-indigo-400 font-mono text-sm mt-1">Scratch & Small Basic</p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="glass-panel p-8 reveal hover-trigger interactive-element group">
+                    <div class="w-14 h-14 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <i data-lucide="layout-template" class="w-7 h-7"></i>
                     </div>
-                    <div class="md:w-[45%] pl-0 md:pl-8 glass-panel p-6 border-transparent group-hover:border-indigo-500/30 transition-colors">
-                        <p class="text-gray-400 text-sm">Discovered programming through visual blocks. Built simple games and logic puzzles, igniting a lifelong passion for creating systems from scratch.</p>
-                    </div>
-                </div>
-
-                <!-- Timeline Item 2 -->
-                <div class="relative md:flex md:justify-between md:items-center w-full reveal delay-100 group md:flex-row-reverse">
-                    <div class="absolute -left-[41px] md:left-1/2 md:-ml-3 w-6 h-6 rounded-full bg-[#0a0a0f] border-2 border-pink-500 flex items-center justify-center z-10 group-hover:scale-125 transition-transform group-hover:bg-pink-500 group-hover:shadow-[0_0_15px_#ec4899]"></div>
-                    <div class="md:w-[45%] text-left pl-0 md:pl-8 mb-4 md:mb-0">
-                        <h4 class="text-2xl font-bold text-white font-display">Web Foundations</h4>
-                        <p class="text-pink-400 font-mono text-sm mt-1">HTML, CSS, JavaScript</p>
-                    </div>
-                    <div class="md:w-[45%] pr-0 md:pr-8 text-left md:text-right glass-panel p-6 border-transparent group-hover:border-pink-500/30 transition-colors">
-                        <p class="text-gray-400 text-sm">Transitioned to text-based languages. Learned how the internet works, styling layouts, and adding interactivity to static pages.</p>
-                    </div>
-                </div>
-
-                <!-- Timeline Item 3 -->
-                <div class="relative md:flex md:justify-between md:items-center w-full reveal delay-200 group">
-                    <div class="absolute -left-[41px] md:left-1/2 md:-ml-3 w-6 h-6 rounded-full bg-[#0a0a0f] border-2 border-emerald-500 flex items-center justify-center z-10 group-hover:scale-125 transition-transform group-hover:bg-emerald-500 group-hover:shadow-[0_0_15px_#10b981]"></div>
-                    <div class="md:w-[45%] text-left md:text-right pr-0 md:pr-8 mb-4 md:mb-0">
-                        <h4 class="text-2xl font-bold text-white font-display">Logic & Logic</h4>
-                        <p class="text-emerald-400 font-mono text-sm mt-1">Python Mastery</p>
-                    </div>
-                    <div class="md:w-[45%] pl-0 md:pl-8 glass-panel p-6 border-transparent group-hover:border-emerald-500/30 transition-colors">
-                        <p class="text-gray-400 text-sm">Dove deep into Python. Explored data structures, game development with Pygame, and backend logic, broadening my capabilities immensely.</p>
-                    </div>
-                </div>
-
-                <!-- Timeline Item 4 -->
-                <div class="relative md:flex md:justify-between md:items-center w-full reveal delay-300 group md:flex-row-reverse">
-                    <div class="absolute -left-[41px] md:left-1/2 md:-ml-3 w-6 h-6 rounded-full bg-[#0a0a0f] border-2 border-blue-500 flex items-center justify-center z-10 group-hover:scale-125 transition-transform group-hover:bg-blue-500 group-hover:shadow-[0_0_15px_#3b82f6]"></div>
-                    <div class="md:w-[45%] text-left pl-0 md:pl-8 mb-4 md:mb-0">
-                        <h4 class="text-2xl font-bold text-white font-display">Mobile & Beyond</h4>
-                        <p class="text-blue-400 font-mono text-sm mt-1">Kotlin & AI Integration</p>
-                    </div>
-                    <div class="md:w-[45%] pr-0 md:pr-8 text-left md:text-right glass-panel p-6 border-transparent group-hover:border-blue-500/30 transition-colors">
-                        <p class="text-gray-400 text-sm">Currently expanding into mobile app development with Kotlin and beginning to architect complex AI assistants like Radius AI.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Skills Bento Grid -->
-        <section id="skills" class="py-24 px-6 md:px-12 max-w-7xl mx-auto">
-            <div class="text-center mb-16 reveal">
-                <h2 class="text-sm text-indigo-400 font-mono tracking-widest uppercase mb-4">// 03. Tech Arsenal</h2>
-                <h3 class="font-display text-4xl md:text-5xl font-bold text-white mb-4">Tools of the Trade</h3>
-                <p class="text-gray-400 max-w-2xl mx-auto">A comprehensive look at the languages, frameworks, and tools I use to build premium digital products.</p>
-            </div>
-            
-            <div class="bento-grid reveal delay-100">
-                <!-- Large Highlight -->
-                <div class="bento-item bento-wide bento-tall p-6 items-start justify-between bg-gradient-to-br from-indigo-900/20 to-purple-900/20 border-indigo-500/30 group hover-trigger interactive-element">
-                    <i class="fa-brands fa-python text-5xl text-blue-400 group-hover:rotate-12 transition-transform"></i>
-                    <div>
-                        <h4 class="text-2xl font-bold text-white mb-2">Python</h4>
-                        <p class="text-gray-400 text-sm">My strongest language. Used for scripts, backend logic, game dev (Pygame), and system tools.</p>
-                    </div>
-                    <div class="absolute right-[-20px] bottom-[-20px] opacity-10">
-                        <i class="fa-brands fa-python text-[150px]"></i>
-                    </div>
-                </div>
-
-                <!-- Standards -->
-                <div class="bento-item hover-trigger interactive-element text-orange-500">
-                    <i class="fa-brands fa-html5 text-4xl mb-2"></i>
-                    <span class="font-medium text-sm text-white">HTML5</span>
-                </div>
-                <div class="bento-item hover-trigger interactive-element text-blue-500">
-                    <i class="fa-brands fa-css3-alt text-4xl mb-2"></i>
-                    <span class="font-medium text-sm text-white">CSS3</span>
-                </div>
-                <div class="bento-item hover-trigger interactive-element text-yellow-400">
-                    <i class="fa-brands fa-js text-4xl mb-2"></i>
-                    <span class="font-medium text-sm text-white">JavaScript</span>
-                </div>
-
-                <!-- Mid-size Highlight -->
-                <div class="bento-item bento-wide p-6 flex-row gap-6 justify-start bg-gradient-to-r from-blue-900/20 to-cyan-900/20 hover-trigger interactive-element">
-                    <i class="fa-brands fa-react text-5xl text-cyan-400 animate-[spin_10s_linear_infinite]"></i>
-                    <div class="text-left">
-                        <h4 class="text-xl font-bold text-white">React.js</h4>
-                        <p class="text-gray-400 text-xs mt-1">Building dynamic UIs and complex web apps.</p>
-                    </div>
-                </div>
-
-                <!-- More skills -->
-                <div class="bento-item hover-trigger interactive-element text-cyan-400">
-                    <i class="fa-solid fa-wind text-3xl mb-2"></i>
-                    <span class="font-medium text-sm text-white">Tailwind</span>
-                </div>
-                <div class="bento-item hover-trigger interactive-element text-purple-400">
-                    <i class="fa-brands fa-java text-4xl mb-2"></i>
-                    <span class="font-medium text-sm text-white">Kotlin</span>
-                </div>
-                <div class="bento-item hover-trigger interactive-element text-white">
-                    <i class="fa-brands fa-github text-4xl mb-2"></i>
-                    <span class="font-medium text-sm text-white">Git/GitHub</span>
+                    <h4 class="text-xl font-bold text-white mb-3">Web Development</h4>
+                    <p class="text-gray-400 text-sm leading-relaxed">Building lightning-fast, fully responsive websites using modern frameworks and best practices. From landing pages to complex platforms.</p>
                 </div>
                 
-                <!-- Another Mid-size -->
-                <div class="bento-item bento-wide p-6 bg-white/5 hover-trigger interactive-element flex-row justify-between">
-                    <div class="text-left">
-                        <h4 class="text-xl font-bold text-white mb-2">Design Tools</h4>
-                        <div class="flex gap-3">
-                            <span class="px-2 py-1 bg-pink-500/20 text-pink-400 text-xs rounded border border-pink-500/30">Figma</span>
-                            <span class="px-2 py-1 bg-blue-500/20 text-blue-400 text-xs rounded border border-blue-500/30">Photoshop</span>
-                        </div>
+                <div class="glass-panel p-8 reveal delay-100 hover-trigger interactive-element group">
+                    <div class="w-14 h-14 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <i data-lucide="cpu" class="w-7 h-7"></i>
                     </div>
-                    <i data-lucide="pen-tool" class="w-10 h-10 text-pink-400"></i>
+                    <h4 class="text-xl font-bold text-white mb-3">Backend & Scripts</h4>
+                    <p class="text-gray-400 text-sm leading-relaxed">Developing robust Python backends, automation scripts, and API integrations to power dynamic applications seamlessly.</p>
                 </div>
 
-                <div class="bento-item hover-trigger interactive-element text-gray-400">
-                    <i data-lucide="terminal-square" class="w-8 h-8 mb-2"></i>
-                    <span class="font-medium text-sm text-white">Bash/Linux</span>
+                <div class="glass-panel p-8 reveal delay-200 hover-trigger interactive-element group">
+                    <div class="w-14 h-14 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <i data-lucide="smartphone" class="w-7 h-7"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-white mb-3">App Prototyping</h4>
+                    <p class="text-gray-400 text-sm leading-relaxed">Crafting initial architectures and logic for mobile applications using Kotlin, focusing on clean user interfaces and efficiency.</p>
                 </div>
             </div>
         </section>
 
         <!-- Projects Section -->
-        <section id="work" class="py-24 px-6 md:px-12 max-w-7xl mx-auto border-t border-white/5">
+        <section id="work" class="py-24 px-6 md:px-12 max-w-7xl mx-auto border-t border-white/5 w-full">
             <div class="mb-16 reveal flex flex-col md:flex-row justify-between items-end gap-6">
                 <div>
-                    <h2 class="text-sm text-indigo-400 font-mono tracking-widest uppercase mb-4">// 04. Selected Works</h2>
+                    <h2 class="text-sm text-indigo-400 font-mono tracking-widest uppercase mb-4">// 03. Selected Works</h2>
                     <h3 class="font-display text-4xl md:text-5xl font-bold text-white">Featured Projects</h3>
                 </div>
                 <a href="https://github.com/amithrosky" target="_blank" class="text-sm text-gray-400 hover:text-white flex items-center gap-2 hover-trigger interactive-element border-b border-white/20 pb-1">
@@ -569,18 +496,15 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                
                 <!-- Project 1 -->
                 <div class="glow-card-wrapper p-[1px] group block reveal hover-trigger interactive-element">
                     <div class="glow-card-content flex flex-col h-full">
                         <div class="h-56 bg-gradient-to-br from-[#0f172a] to-[#1e1b4b] relative flex items-center justify-center overflow-hidden">
-                            <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjIiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wNSkiLz48L3N2Zz4=')]"></div>
                             <i data-lucide="monitor-play" class="w-20 h-20 text-blue-400 relative z-10 group-hover:scale-110 transition-transform duration-500 drop-shadow-[0_0_15px_rgba(96,165,250,0.5)]"></i>
                         </div>
                         <div class="p-8 flex flex-col flex-grow">
                             <div class="flex gap-2 mb-4">
                                 <span class="text-[10px] uppercase tracking-wider font-mono text-blue-400 bg-blue-400/10 px-2 py-1 rounded">Web App</span>
-                                <span class="text-[10px] uppercase tracking-wider font-mono text-gray-400 border border-white/10 px-2 py-1 rounded">JS</span>
                             </div>
                             <h3 class="font-display text-2xl font-bold mb-3 text-white group-hover:text-blue-400 transition-colors">Compile Studio</h3>
                             <p class="text-gray-400 flex-grow mb-6 text-sm leading-relaxed">A specialized development environment built in the browser for maximum efficiency and seamless coding.</p>
@@ -595,13 +519,11 @@
                 <div class="glow-card-wrapper p-[1px] group block reveal delay-100 hover-trigger interactive-element">
                     <div class="glow-card-content flex flex-col h-full">
                         <div class="h-56 bg-gradient-to-br from-[#18181b] to-[#312e81] relative flex items-center justify-center overflow-hidden">
-                            <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjIiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wNSkiLz48L3N2Zz4=')]"></div>
                             <i data-lucide="code-square" class="w-20 h-20 text-indigo-400 relative z-10 group-hover:scale-110 transition-transform duration-500 drop-shadow-[0_0_15px_rgba(99,102,241,0.5)]"></i>
                         </div>
                         <div class="p-8 flex flex-col flex-grow">
                             <div class="flex gap-2 mb-4">
                                 <span class="text-[10px] uppercase tracking-wider font-mono text-indigo-400 bg-indigo-400/10 px-2 py-1 rounded">Platform</span>
-                                <span class="text-[10px] uppercase tracking-wider font-mono text-gray-400 border border-white/10 px-2 py-1 rounded">HTML/CSS</span>
                             </div>
                             <h3 class="font-display text-2xl font-bold mb-3 text-white group-hover:text-indigo-400 transition-colors">FiCode</h3>
                             <p class="text-gray-400 flex-grow mb-6 text-sm leading-relaxed">An interactive educational code platform designed to enhance learning and web prototyping.</p>
@@ -616,13 +538,11 @@
                 <div class="glow-card-wrapper p-[1px] group block reveal delay-200 hover-trigger interactive-element">
                     <div class="glow-card-content flex flex-col h-full">
                         <div class="h-56 bg-gradient-to-br from-[#064e3b] to-[#022c22] relative flex items-center justify-center overflow-hidden">
-                            <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjIiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wNSkiLz48L3N2Zz4=')]"></div>
                             <i data-lucide="shield-alert" class="w-20 h-20 text-emerald-400 relative z-10 group-hover:scale-110 transition-transform duration-500 drop-shadow-[0_0_15px_rgba(16,185,129,0.5)]"></i>
                         </div>
                         <div class="p-8 flex flex-col flex-grow">
                             <div class="flex gap-2 mb-4">
                                 <span class="text-[10px] uppercase tracking-wider font-mono text-emerald-400 bg-emerald-400/10 px-2 py-1 rounded">Security</span>
-                                <span class="text-[10px] uppercase tracking-wider font-mono text-gray-400 border border-white/10 px-2 py-1 rounded">Python</span>
                             </div>
                             <h3 class="font-display text-2xl font-bold mb-3 text-white group-hover:text-emerald-400 transition-colors">EagSec</h3>
                             <p class="text-gray-400 flex-grow mb-6 text-sm leading-relaxed">A focused cybersecurity project exploring network vulnerabilities and defensive programming.</p>
@@ -633,204 +553,158 @@
                     </div>
                 </div>
             </div>
-
-            <!-- In the Lab -->
-            <div class="mt-32">
-                <div class="mb-12 reveal">
-                    <h3 class="font-display text-3xl font-bold text-white flex items-center gap-3">
-                        <i data-lucide="flask-conical" class="text-pink-500"></i> The Lab
-                    </h3>
-                    <p class="text-gray-400 mt-2">Active experiments and upcoming major releases.</p>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="glass-panel p-6 reveal hover-trigger interactive-element group">
-                        <div class="flex justify-between items-start mb-4">
-                            <h4 class="text-xl font-bold text-white group-hover:text-pink-400 transition-colors">Radius AI</h4>
-                            <span class="animate-pulse w-2 h-2 rounded-full bg-pink-500"></span>
-                        </div>
-                        <p class="text-gray-400 text-sm mb-4">Developing an advanced, contextual AI assistant using React and modern JS architectures.</p>
-                        <div class="flex gap-2">
-                            <span class="text-[10px] px-2 py-1 border border-white/10 rounded text-gray-300">React</span>
-                            <span class="text-[10px] px-2 py-1 border border-white/10 rounded text-gray-300">AI/ML logic</span>
-                        </div>
-                    </div>
-
-                    <div class="glass-panel p-6 reveal delay-100 hover-trigger interactive-element group">
-                        <div class="flex justify-between items-start mb-4">
-                            <h4 class="text-xl font-bold text-white group-hover:text-indigo-400 transition-colors">Radius Browser</h4>
-                            <span class="w-2 h-2 rounded-full bg-indigo-500 opacity-50"></span>
-                        </div>
-                        <p class="text-gray-400 text-sm mb-4">A privacy-first, ultra-lightweight web browser conceptualized with integrated developer tools.</p>
-                        <div class="flex gap-2">
-                            <span class="text-[10px] px-2 py-1 border border-white/10 rounded text-gray-300">Electron</span>
-                            <span class="text-[10px] px-2 py-1 border border-white/10 rounded text-gray-300">JS</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </section>
 
-        <!-- Interactive Terminal Easter Egg -->
-        <section id="terminal" class="py-24 px-6 max-w-4xl mx-auto">
-            <div class="text-center mb-10 reveal">
-                <h2 class="text-sm text-indigo-400 font-mono tracking-widest uppercase mb-4">// 05. Developer Console</h2>
-                <p class="text-gray-400">Prefer the command line? Try some commands: <code class="text-white bg-white/10 px-1 rounded">help</code>, <code class="text-white bg-white/10 px-1 rounded">skills</code>, <code class="text-white bg-white/10 px-1 rounded">whoami</code></p>
-            </div>
-            
-            <div class="terminal-window reveal delay-100 hover-trigger interactive-element cursor-text">
-                <div class="terminal-header">
-                    <div class="terminal-dots">
-                        <span class="bg-red-500"></span>
-                        <span class="bg-yellow-500"></span>
-                        <span class="bg-green-500"></span>
-                    </div>
-                    <div class="mx-auto text-xs text-gray-500 font-mono">guest@amithrosky: ~</div>
-                </div>
-                <div class="terminal-body" id="terminal-body">
-                    <div>Welcome to Amithrosky OS v2.0.26</div>
-                    <div>Type 'help' to see available commands.</div>
-                    <div class="mt-4" id="terminal-output"></div>
-                    <div class="terminal-input-line">
-                        <span class="text-green-400">guest@amithrosky</span><span class="text-white">:</span><span class="text-blue-400">~</span><span class="text-white">$</span>
-                        <input type="text" class="terminal-input interactive-element" id="terminal-input" autocomplete="off" spellcheck="false" autofocus>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- FAQ Accordion -->
-        <section class="py-24 px-6 md:px-12 max-w-3xl mx-auto border-t border-white/5">
-            <div class="text-center mb-12 reveal">
-                <h2 class="text-sm text-indigo-400 font-mono tracking-widest uppercase mb-4">// 06. FAQ</h2>
-                <h3 class="font-display text-4xl font-bold text-white">Common Questions</h3>
+        <!-- Gaming Section -->
+        <section id="gaming" class="py-24 px-6 md:px-12 max-w-7xl mx-auto border-t border-white/5 w-full relative">
+            <div class="text-center mb-16 reveal relative z-10">
+                <h2 class="text-sm text-green-400 font-pixel tracking-widest uppercase mb-6 leading-loose">// 04. Gaming Hub</h2>
+                <h3 class="font-pixel text-2xl md:text-4xl text-white mb-6 drop-shadow-[4px_4px_0_rgba(0,0,0,1)]">The Minecraft Realm</h3>
+                <p class="text-gray-300 max-w-2xl mx-auto font-mono bg-black/50 p-4 border-2 border-[#555] inline-block">Not only I am a programmer, I also play Minecraft with great love for TECHNOBLADE 👑.</p>
             </div>
 
-            <div class="space-y-4">
-                <!-- Accordion Item 1 -->
-                <div class="glass-panel p-2 reveal hover-trigger interactive-element group accordion-item">
-                    <button class="w-full text-left p-4 flex justify-between items-center text-white font-medium focus:outline-none accordion-btn">
-                        <span>Are you available for freelance work?</span>
-                        <i data-lucide="plus" class="w-5 h-5 text-gray-400 transition-transform accordion-icon"></i>
-                    </button>
-                    <div class="accordion-content h-0 overflow-hidden transition-all duration-300 px-4">
-                        <p class="text-gray-400 text-sm pb-4">As a student, my time is limited, but I am always open to discussing interesting projects, collaborations, or hackathons. Reach out via the contact form!</p>
-                    </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 relative z-10 font-pixel text-[10px] md:text-xs">
+                <!-- MC Block 1 -->
+                <div class="minecraft-block p-6 flex flex-col items-center justify-center text-center reveal hover-trigger interactive-element min-h-[200px]">
+                    <i data-lucide="pickaxe" class="w-12 h-12 mb-4 text-[#8b4513]"></i>
+                    <h4 class="text-white mb-2 text-sm">Modding</h4>
+                    <p class="text-gray-200 opacity-80 leading-relaxed">Custom logic and block behaviors built with Java.</p>
                 </div>
                 
-                <!-- Accordion Item 2 -->
-                <div class="glass-panel p-2 reveal delay-100 hover-trigger interactive-element group accordion-item">
-                    <button class="w-full text-left p-4 flex justify-between items-center text-white font-medium focus:outline-none accordion-btn">
-                        <span>What is your primary tech stack?</span>
-                        <i data-lucide="plus" class="w-5 h-5 text-gray-400 transition-transform accordion-icon"></i>
-                    </button>
-                    <div class="accordion-content h-0 overflow-hidden transition-all duration-300 px-4">
-                        <p class="text-gray-400 text-sm pb-4">For the web, I prefer standard HTML/CSS/JS or React with Tailwind CSS. For scripting and backend/logic tasks, Python is my absolute go-to language.</p>
-                    </div>
+                <!-- MC Block 2 -->
+                <div class="minecraft-block p-6 flex flex-col items-center justify-center text-center reveal delay-100 hover-trigger interactive-element min-h-[200px]" style="background-color: #5b8731;">
+                    <i data-lucide="sword" class="w-12 h-12 mb-4 text-[#e0e0e0]"></i>
+                    <h4 class="text-white mb-2 text-sm">PvP Mechanics</h4>
+                    <p class="text-gray-200 opacity-80 leading-relaxed">Analyzing combat data and optimizing click rates.</p>
                 </div>
 
-                <!-- Accordion Item 3 -->
-                <div class="glass-panel p-2 reveal delay-200 hover-trigger interactive-element group accordion-item">
-                    <button class="w-full text-left p-4 flex justify-between items-center text-white font-medium focus:outline-none accordion-btn">
-                        <span>How did you build this portfolio?</span>
-                        <i data-lucide="plus" class="w-5 h-5 text-gray-400 transition-transform accordion-icon"></i>
-                    </button>
-                    <div class="accordion-content h-0 overflow-hidden transition-all duration-300 px-4">
-                        <p class="text-gray-400 text-sm pb-4">This portfolio is a custom-coded single HTML file utilizing Tailwind CSS for styling, pure JavaScript for logic, Three.js for the 3D background, and Tone.js for sound effects. It's designed to be a highly optimized, immersive experience.</p>
-                    </div>
+                <!-- MC Block 3 -->
+                <div class="minecraft-block p-6 flex flex-col items-center justify-center text-center reveal delay-200 hover-trigger interactive-element min-h-[200px]" style="background-color: #4a4a4a;">
+                    <i data-lucide="blocks" class="w-12 h-12 mb-4 text-[#ff5555]"></i>
+                    <h4 class="text-white mb-2 text-sm">Redstone Logic</h4>
+                    <p class="text-gray-200 opacity-80 leading-relaxed">Translating real-world digital logic gates into Redstone.</p>
                 </div>
+            </div>
+            
+            <!-- Pixel Decoration -->
+            <div class="absolute bottom-10 right-10 opacity-20 pointer-events-none grid grid-cols-2 gap-1 w-16 h-16">
+                <div class="bg-green-500"></div><div class="bg-green-600"></div>
+                <div class="bg-green-700"></div><div class="bg-green-500"></div>
             </div>
         </section>
 
-        <!-- Contact Section -->
-        <section id="contact" class="py-24 px-6 md:px-12 max-w-4xl mx-auto mb-20 relative">
-            <!-- Glow behind form -->
-            <div class="absolute inset-0 bg-indigo-500/10 blur-[100px] z-0 rounded-full"></div>
-            
-            <div class="glass-panel p-8 md:p-12 relative z-10 reveal border-t border-white/20 shadow-2xl">
-                <div class="text-center mb-10">
-                    <h2 class="text-sm text-indigo-400 font-mono tracking-widest uppercase mb-2">// 07. Get In Touch</h2>
-                    <h3 class="font-display text-4xl font-bold text-white mb-4">Let's Build Together</h3>
-                    <p class="text-gray-400 text-sm">Have an idea? Want to chat about code? Send me a message.</p>
+        <!-- Unified Terminal & Contact Section -->
+        <section id="terminal" class="py-24 px-6 md:px-12 max-w-7xl mx-auto border-t border-white/5 w-full">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-sm text-indigo-400 font-mono tracking-widest uppercase mb-4">// 05. Command Center</h2>
+                <h3 class="font-display text-4xl md:text-5xl font-bold text-white mb-4">Connect & Execute</h3>
+                <p class="text-gray-400 max-w-2xl mx-auto">Interact with the developer console or send a direct secure message.</p>
+            </div>
+
+            <div class="flex flex-col lg:flex-row gap-8 items-stretch reveal delay-100">
+                
+                <!-- Terminal Side -->
+                <div class="w-full lg:w-1/2 terminal-window hover-trigger interactive-element cursor-text flex flex-col">
+                    <div class="terminal-header shrink-0">
+                        <div class="terminal-dots">
+                            <span class="bg-red-500"></span><span class="bg-yellow-500"></span><span class="bg-green-500"></span>
+                        </div>
+                        <div class="mx-auto text-xs text-gray-500 font-mono">Terminal Window</div>
+                    </div>
+                    <div class="terminal-body flex-grow" id="terminal-body">
+                        <div>Welcome to the Terminal v3.0.0</div>
+                        <div class="text-gray-500">Type 'help' to see available commands.</div>
+                        <div class="mt-4" id="terminal-output"></div>
+                        <div class="terminal-input-line">
+                            <span class="text-green-400">guest@user</span><span class="text-white">:</span><span class="text-blue-400">~</span><span class="text-white">$</span>
+                            <input type="text" class="terminal-input interactive-element" id="terminal-input" autocomplete="off" spellcheck="false">
+                        </div>
+                    </div>
                 </div>
 
-                <form id="contact-form" class="space-y-6">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="relative group">
-                            <input type="text" id="name" required class="w-full bg-black/30 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-indigo-500 transition-colors peer hover-trigger interactive-element placeholder-transparent" placeholder="Name">
-                            <label for="name" class="absolute left-4 top-3 text-gray-500 text-sm transition-all peer-placeholder-shown:text-base peer-placeholder-shown:top-3 peer-focus:-top-2.5 peer-focus:text-xs peer-focus:text-indigo-400 bg-[#0d0d12] px-1 pointer-events-none">Your Name</label>
-                        </div>
-                        <div class="relative group">
-                            <input type="email" id="email" required class="w-full bg-black/30 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-indigo-500 transition-colors peer hover-trigger interactive-element placeholder-transparent" placeholder="Email">
-                            <label for="email" class="absolute left-4 top-3 text-gray-500 text-sm transition-all peer-placeholder-shown:text-base peer-placeholder-shown:top-3 peer-focus:-top-2.5 peer-focus:text-xs peer-focus:text-indigo-400 bg-[#0d0d12] px-1 pointer-events-none">Your Email</label>
-                        </div>
-                    </div>
-                    <div class="relative group">
-                        <textarea id="message" required rows="4" class="w-full bg-black/30 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-indigo-500 transition-colors peer hover-trigger interactive-element placeholder-transparent resize-none" placeholder="Message"></textarea>
-                        <label for="message" class="absolute left-4 top-3 text-gray-500 text-sm transition-all peer-placeholder-shown:text-base peer-placeholder-shown:top-3 peer-focus:-top-2.5 peer-focus:text-xs peer-focus:text-indigo-400 bg-[#0d0d12] px-1 pointer-events-none">Your Message</label>
-                    </div>
-                    
-                    <button type="submit" class="w-full btn-premium hover-trigger interactive-element font-bold text-lg py-4 mt-4">
-                        Send Message <i data-lucide="send" class="ml-2 w-5 h-5"></i>
-                    </button>
-                </form>
+                <div class="w-full lg:w-1/2 glass-panel p-8 relative flex flex-col justify-center border-t border-white/20 shadow-2xl overflow-hidden">
+    <div class="absolute inset-0 bg-indigo-500/5 blur-[80px] z-0 rounded-full"></div>
+    <div class="relative z-10">
+        <h4 class="font-display text-2xl font-bold text-white mb-6 flex items-center gap-2">
+            <i data-lucide="mail" class="text-indigo-400"></i> Get In Touch
+        </h4>
+        <form id="contact-form" class="space-y-5">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <div class="relative group">
+                    <input type="text" id="name" required class="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-indigo-500 transition-colors peer hover-trigger interactive-element placeholder-transparent text-sm" placeholder="Name">
+                    <label for="name" class="absolute left-4 -top-2.5 text-xs text-gray-500 transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:top-3 peer-focus:-top-2.5 peer-focus:text-xs peer-focus:text-indigo-400 bg-[#0d0d12] px-1 pointer-events-none">Your Name</label>
+                </div>
+                <div class="relative group">
+                    <input type="email" id="email" required class="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-indigo-500 transition-colors peer hover-trigger interactive-element placeholder-transparent text-sm" placeholder="Email">
+                    <label for="email" class="absolute left-4 -top-2.5 text-xs text-gray-500 transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:top-3 peer-focus:-top-2.5 peer-focus:text-xs peer-focus:text-indigo-400 bg-[#0d0d12] px-1 pointer-events-none">Your Email</label>
+                </div>
+            </div>
+            <div class="relative group">
+                <textarea id="message" required rows="4" class="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-indigo-500 transition-colors peer hover-trigger interactive-element placeholder-transparent resize-none text-sm" placeholder="Message"></textarea>
+                <label for="message" class="absolute left-4 -top-2.5 text-xs text-gray-500 transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:top-3 peer-focus:-top-2.5 peer-focus:text-xs peer-focus:text-indigo-400 bg-[#0d0d12] px-1 pointer-events-none">Your Message</label>
+            </div>
+            
+            <button type="submit" class="w-full py-3 bg-white text-black font-bold rounded-lg hover:bg-gray-200 transition-colors flex items-center justify-center gap-2 hover-trigger interactive-element mt-2">
+                Transmit Message <i data-lucide="send" class="w-4 h-4"></i>
+            </button>
+        </form>
+    </div>
+</div>
+                </div>
+
             </div>
         </section>
 
     </main>
 
     <!-- Footer -->
-    <footer class="relative z-10 border-t border-white/10 bg-black/50 backdrop-blur-lg pt-20 pb-10 px-6 mt-20">
-        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 mb-16">
-            
+    <footer class="relative z-10 border-t border-white/10 bg-black/80 backdrop-blur-xl pt-16 pb-8 px-6 mt-10">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
             <div class="md:col-span-1">
-                <a href="#" class="font-display text-3xl font-bold tracking-tighter text-white mb-4 block">A.</a>
-                <p class="text-gray-400 text-sm leading-relaxed max-w-xs">Crafting premium, highly-interactive digital experiences with a focus on logic, aesthetics, and user interaction.</p>
+                <img src="image_a528ff.png" alt="Amithrosky Logo" class="w-12 h-12 rounded-xl object-cover border border-white/20 mb-4 shadow-lg">
+                <h4 class="font-display text-2xl font-bold text-white mb-2">Amithrosky</h4>
+                <p class="text-gray-400 text-sm leading-relaxed max-w-xs">Crafting premium, highly-interactive digital experiences with a focus on logic, aesthetics, and optimal user interaction.</p>
             </div>
 
             <div>
-                <h4 class="text-white font-bold mb-4 font-display">Quick Links</h4>
+                <h4 class="text-white font-bold mb-4 font-display">Navigation</h4>
                 <ul class="space-y-2 text-sm text-gray-400">
-                    <li><a href="#about" class="hover:text-indigo-400 transition-colors hover-trigger interactive-element">About Me</a></li>
-                    <li><a href="#journey" class="hover:text-indigo-400 transition-colors hover-trigger interactive-element">My Journey</a></li>
-                    <li><a href="#work" class="hover:text-indigo-400 transition-colors hover-trigger interactive-element">Projects</a></li>
-                    <li><a href="#terminal" class="hover:text-indigo-400 transition-colors hover-trigger interactive-element">Terminal</a></li>
+                    <li><a href="#about" class="hover:text-indigo-400 transition-colors hover-trigger interactive-element">About Explorer</a></li>
+                    <li><a href="#work" class="hover:text-indigo-400 transition-colors hover-trigger interactive-element">Project Archives</a></li>
+                    <li><a href="#gaming" class="hover:text-indigo-400 transition-colors hover-trigger interactive-element">Gaming Hub</a></li>
+                    <li><a href="#terminal" class="hover:text-indigo-400 transition-colors hover-trigger interactive-element">Terminal Access</a></li>
                 </ul>
             </div>
 
             <div>
-                <h4 class="text-white font-bold mb-4 font-display">Connect</h4>
-                <div class="flex gap-4">
-                    <a href="https://github.com/amithrosky" target="_blank" class="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex justify-center items-center hover:bg-white hover:text-black transition-all hover-trigger interactive-element">
-                        <i class="fa-brands fa-github"></i>
-                    </a>
-                    <a href="https://x.com/amithrosky" target="_blank" class="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex justify-center items-center hover:bg-white hover:text-black transition-all hover-trigger interactive-element">
-                        <i class="fa-brands fa-x-twitter"></i>
-                    </a>
-                    <a href="https://www.instagram.com/amithrosky" target="_blank" class="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex justify-center items-center hover:bg-white hover:text-black transition-all hover-trigger interactive-element">
-                        <i class="fa-brands fa-instagram"></i>
-                    </a>
+                <h4 class="text-white font-bold mb-4 font-display">Social Matrix</h4>
+                <div class="flex flex-wrap gap-3">
+                    <a href="https://github.com/amithrosky" target="_blank" class="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex justify-center items-center hover:bg-white hover:text-black transition-all hover-trigger interactive-element"><i class="fa-brands fa-github"></i></a>
+                    <a href="https://x.com/amithrosky" target="_blank" class="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex justify-center items-center hover:bg-white hover:text-black transition-all hover-trigger interactive-element"><i class="fa-brands fa-x-twitter"></i></a>
+                    <a href="https://www.instagram.com/amithrosky" target="_blank" class="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex justify-center items-center hover:bg-white hover:text-black transition-all hover-trigger interactive-element"><i class="fa-brands fa-instagram"></i></a>
                 </div>
             </div>
         </div>
 
-        <div class="max-w-7xl mx-auto border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+        <div class="max-w-7xl mx-auto border-t border-white/10 pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
             <p class="text-xs text-gray-500 font-mono">
-                &copy; <span id="current-year"></span> Amithrosky. System Fully Operational.
+                &copy; <span id="current-year"></span> Amithrosky. Systems Nominal.
             </p>
-            <button id="back-to-top" class="text-xs text-gray-500 hover:text-white font-mono flex items-center gap-2 hover-trigger interactive-element">
-                BACK TO TOP <i data-lucide="arrow-up" class="w-3 h-3"></i>
+            <button id="back-to-top" class="text-xs text-gray-400 hover:text-white font-mono flex items-center gap-2 hover-trigger interactive-element bg-white/5 px-3 py-1.5 rounded-full border border-white/10">
+                INITIATE ASCENT <i data-lucide="arrow-up" class="w-3 h-3"></i>
             </button>
         </div>
     </footer>
 
-    <!-- INTERACTIVE SCRIPTS -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             lucide.createIcons();
             
-            // Audio System (Tone.js)
+            // System states
             let audioEnabled = false;
+            let currentTheme = 'default';
+
+            // Audio System Setup
             const synth = new Tone.PolySynth(Tone.Synth).toDestination();
             synth.set({
                 oscillator: { type: "sine" },
@@ -838,31 +712,10 @@
                 volume: -20
             });
 
-            const playHoverSound = () => {
-                if(audioEnabled && Tone.context.state === 'running') {
-                    synth.triggerAttackRelease("C5", "32n", "+0", 0.1);
-                }
-            };
-            const playClickSound = () => {
-                if(audioEnabled && Tone.context.state === 'running') {
-                    synth.triggerAttackRelease(["C4", "E4", "G4"], "16n", "+0", 0.3);
-                }
-            };
+            const playHoverSound = () => { if(audioEnabled && Tone.context.state === 'running') synth.triggerAttackRelease("C5", "32n", "+0", 0.05); };
+            const playClickSound = () => { if(audioEnabled && Tone.context.state === 'running') synth.triggerAttackRelease(["C4", "E4", "G4"], "16n", "+0", 0.1); };
 
-            // Enable Audio on first interaction
-            const enableAudio = async () => {
-                if(!audioEnabled) {
-                    await Tone.start();
-                    audioEnabled = true;
-                    document.getElementById('audio-status-text').innerText = "Audio Active";
-                    document.querySelector('.music-bars').style.opacity = 1;
-                    playClickSound(); // Confirm audio
-                    window.removeEventListener('click', enableAudio);
-                }
-            };
-            window.addEventListener('click', enableAudio);
-
-            // Toast Notification System
+            // Toast System
             const showToast = (message, type = 'success') => {
                 const container = document.getElementById('toast-container');
                 const toast = document.createElement('div');
@@ -873,243 +726,231 @@
                 
                 container.appendChild(toast);
                 lucide.createIcons();
-
-                // Animate In
-                setTimeout(() => { toast.classList.remove('translate-y-10', 'opacity-0'); }, 10);
-                
-                // Animate Out
+                setTimeout(() => toast.classList.remove('translate-y-10', 'opacity-0'), 10);
                 setTimeout(() => {
                     toast.classList.add('opacity-0', 'translate-x-10');
                     setTimeout(() => toast.remove(), 300);
                 }, 3000);
             };
 
+            // Dropdown Menu Logic
+            const setupDropdown = (btnId, menuId) => {
+                const btn = document.getElementById(btnId);
+                const menu = document.getElementById(menuId);
+                let isOpen = false;
+
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    isOpen = !isOpen;
+                    // close others
+                    document.querySelectorAll('.popup-menu').forEach(m => {
+                        if(m !== menu) m.classList.remove('active');
+                    });
+                    menu.classList.toggle('active', isOpen);
+                });
+
+                document.addEventListener('click', (e) => {
+                    if(!menu.contains(e.target) && !btn.contains(e.target)) {
+                        menu.classList.remove('active');
+                        isOpen = false;
+                    }
+                });
+            };
+            setupDropdown('theme-toggle-btn', 'theme-dropdown');
+            setupDropdown('audio-toggle-btn', 'audio-dropdown');
+
+            // Audio Controls
+            document.querySelectorAll('.audio-select-btn').forEach(btn => {
+                btn.addEventListener('click', async () => {
+                    const val = btn.getAttribute('data-val');
+                    if (val === 'on') {
+                        await Tone.start();
+                        audioEnabled = true;
+                        document.getElementById('audio-icon').setAttribute('data-lucide', 'volume-2');
+                        showToast('Audio Systems Online', 'success');
+                        playClickSound();
+                    } else {
+                        audioEnabled = false;
+                        document.getElementById('audio-icon').setAttribute('data-lucide', 'volume-x');
+                        showToast('Audio Muted', 'info');
+                    }
+                    lucide.createIcons();
+                    document.getElementById('audio-dropdown').classList.remove('active');
+                });
+            });
+
+            // Theme Controls
+            document.querySelectorAll('.theme-select-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const theme = btn.getAttribute('data-theme-val');
+                    if(theme === 'default') document.documentElement.removeAttribute('data-theme');
+                    else document.documentElement.setAttribute('data-theme', theme);
+                    
+                    showToast(`Theme changed to ${theme.toUpperCase()}`, 'info');
+                    document.getElementById('theme-dropdown').classList.remove('active');
+                });
+            });
+
+            // Preloader Loader
             const preloader = document.getElementById('preloader');
             const loaderBar = document.getElementById('loader-bar');
-            const loadingPerc = document.getElementById('loading-perc');
             let progress = 0;
-            
             const loadInterval = setInterval(() => {
-                progress += Math.floor(Math.random() * 15) + 5;
-                if(progress > 100) progress = 100;
-                
-                loaderBar.style.width = `${progress}%`;
-                loadingPerc.innerText = `${progress}%`;
-                
-                if(progress === 100) {
+                progress += Math.floor(Math.random() * 20) + 10;
+                if(progress >= 100) {
+                    progress = 100;
                     clearInterval(loadInterval);
+                    loaderBar.style.width = '100%';
+                    document.getElementById('loading-perc').innerText = '100%';
                     setTimeout(() => {
                         preloader.style.opacity = '0';
-                        setTimeout(() => preloader.style.display = 'none', 800);
-                        // Trigger reveals
+                        setTimeout(() => { preloader.style.display = 'none'; initTyped(); }, 800);
                         document.querySelectorAll('.reveal').forEach(el => {
                             if(el.getBoundingClientRect().top < window.innerHeight) el.classList.add('active');
                         });
-                        // Init Typed
-                        initTyped();
-                    }, 500);
+                    }, 400);
+                } else {
+                    loaderBar.style.width = `${progress}%`;
+                    document.getElementById('loading-perc').innerText = `${progress}%`;
                 }
             }, 100);
 
-            // Scroll Progress
-            window.addEventListener('scroll', () => {
-                const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-                const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-                const scrolled = (winScroll / height) * 100;
-                document.getElementById('scroll-progress').style.width = scrolled + "%";
-            });
-
-            // Back to top
-            document.getElementById('back-to-top').addEventListener('click', () => {
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            });
-
-            const calculateGrade = () => {
-                const currentYear = new Date().getFullYear();
-                document.getElementById('current-year').innerText = currentYear;
-                const calculatedGrade = 7 + (currentYear - 2026);
-                const getOrdinalNum = n => n + (n > 0 ? ['th', 'st', 'nd', 'rd'][(n > 3 && n < 21) || n % 10 > 3 ? 0 : n % 10] : '');
-                const gradeText = `${getOrdinalNum(calculatedGrade)} Grade`;
-                
-                document.getElementById('dynamic-grade-display').innerText = gradeText;
-                document.getElementById('inline-grade').innerText = gradeText;
-            };
-            calculateGrade();
-
-            // Custom Cursor with Magnetic Effect
             const cursorDot = document.getElementById('cursor-dot');
             const cursorOutline = document.getElementById('cursor-outline');
-            let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
-            let outlineX = mouseX, outlineY = mouseY;
+            let cx = -100, cy = -100;
+            let ox = -100, oy = -100;
 
             if (window.matchMedia('(pointer: fine)').matches) {
-                window.addEventListener('mousemove', e => {
-                    mouseX = e.clientX; mouseY = e.clientY;
-                    cursorDot.style.left = `${mouseX}px`; cursorDot.style.top = `${mouseY}px`;
+                document.addEventListener('mousemove', e => {
+                    cx = e.clientX; cy = e.clientY;
+                    cursorDot.style.setProperty('--cx', `${cx}px`);
+                    cursorDot.style.setProperty('--cy', `${cy}px`);
+                    cursorDot.style.opacity = 1;
+                    cursorOutline.style.opacity = 1;
+                });
+
+                document.addEventListener('mouseleave', () => {
+                    cursorDot.style.opacity = 0;
+                    cursorOutline.style.opacity = 0;
                 });
 
                 const renderCursor = () => {
-                    outlineX += (mouseX - outlineX) * 0.2;
-                    outlineY += (mouseY - outlineY) * 0.2;
-                    cursorOutline.style.left = `${outlineX}px`; cursorOutline.style.top = `${outlineY}px`;
+                    // Smooth easing
+                    ox += (cx - ox) * 0.2;
+                    oy += (cy - oy) * 0.2;
+                    cursorOutline.style.setProperty('--ox', `${ox}px`);
+                    cursorOutline.style.setProperty('--oy', `${oy}px`);
                     requestAnimationFrame(renderCursor);
                 };
                 requestAnimationFrame(renderCursor);
 
                 document.querySelectorAll('.interactive-element').forEach(el => {
-                    el.addEventListener('mouseenter', () => {
-                        document.body.classList.add('hovering');
-                        playHoverSound();
-                    });
+                    el.addEventListener('mouseenter', () => { document.body.classList.add('hovering'); playHoverSound(); });
                     el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
                     el.addEventListener('click', playClickSound);
                 });
             }
 
-            // Glow Cards Mouse Track
-            document.querySelectorAll('.glow-card-wrapper').forEach(wrapper => {
-                wrapper.addEventListener('mousemove', e => {
-                    const rect = wrapper.getBoundingClientRect();
-                    wrapper.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
-                    wrapper.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
-                });
-            });
-
-            // Reveal Observer
-            const revealObserver = new IntersectionObserver((entries) => {
+            // Scroll Logic & Dynamic Section UI
+            const sections = document.querySelectorAll('section');
+            const scrollObserver = new IntersectionObserver(entries => {
                 entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('active');
-                        
-                        // Counter animation trigger
-                        if(entry.target.querySelector('.counter')) {
-                            entry.target.querySelectorAll('.counter').forEach(counter => {
-                                const target = +counter.getAttribute('data-target');
-                                const duration = 2000;
-                                const step = target / (duration / 16);
-                                let current = 0;
-                                const updateCounter = () => {
-                                    current += step;
-                                    if(current < target) {
-                                        counter.innerText = Math.ceil(current) + (target > 1000 ? '+' : '');
-                                        requestAnimationFrame(updateCounter);
-                                    } else {
-                                        counter.innerText = target + (target > 1000 ? '+' : '');
-                                    }
-                                };
-                                updateCounter();
-                            });
-                            // Prevent re-triggering
-                            entry.target.classList.remove('reveal'); 
-                        }
+                    if(entry.isIntersecting) {
+                        document.body.setAttribute('data-active-section', entry.target.id);
                     }
                 });
+            }, { threshold: 0.4 });
+            sections.forEach(s => scrollObserver.observe(s));
+
+            window.addEventListener('scroll', () => {
+                const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+                const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                document.getElementById('scroll-progress').style.width = (winScroll / height) * 100 + "%";
+            });
+
+            document.getElementById('back-to-top').addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+            // Text calculations
+            const calcGrade = () => {
+                const y = new Date().getFullYear();
+                document.getElementById('current-year').innerText = y;
+                const g = 7 + (y - 2026);
+                const ord = n => n + (n>0?['th','st','nd','rd'][(n>3&&n<21)||n%10>3?0:n%10]:'');
+                const t = `${ord(g)} Grade`;
+                document.getElementById('dynamic-grade-display').innerText = t;
+                document.getElementById('inline-grade').innerText = t;
+            };
+            calcGrade();
+
+            // Reveal Animation Observer
+            const revealObs = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) { entry.target.classList.add('active'); revealObs.unobserve(entry.target); }
+                });
             }, { threshold: 0.1 });
-            document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+            document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
 
             const initTyped = () => {
                 new Typed('#typed-subtitle', {
-                    strings: [
-                        'Designing the future.', 
-                        'Writing clean, logical code.', 
-                        'Exploring the limits of web tech.',
-                        'Building premium experiences.'
-                    ],
+                    strings: ['Designing the future.', 'Writing logical code.', 'Pushing web limits.', 'Building premium UI.'],
                     typeSpeed: 50, backSpeed: 30, backDelay: 2000, loop: true, showCursor: true, cursorChar: '_'
                 });
             };
 
-            // Theme Toggler
-            const themes = ['default', 'cyberpunk', 'emerald'];
-            let currentThemeIdx = 0;
-            document.getElementById('theme-toggle').addEventListener('click', () => {
-                currentThemeIdx = (currentThemeIdx + 1) % themes.length;
-                if(themes[currentThemeIdx] === 'default') {
-                    document.documentElement.removeAttribute('data-theme');
-                } else {
-                    document.documentElement.setAttribute('data-theme', themes[currentThemeIdx]);
-                }
-                showToast(`Theme updated to ${themes[currentThemeIdx].toUpperCase()}`, 'info');
-            });
+            // Mobile Menu Fix
+            const mBtn = document.getElementById('mobile-menu-btn');
+            const cBtn = document.getElementById('close-menu-btn');
+            const mMenu = document.getElementById('mobile-menu');
+            mBtn.addEventListener('click', () => mMenu.classList.remove('translate-y-full'));
+            cBtn.addEventListener('click', () => mMenu.classList.add('translate-y-full'));
+            document.querySelectorAll('.mobile-link').forEach(l => l.addEventListener('click', () => mMenu.classList.add('translate-y-full')));
 
-            // Contact Form Submit Mock
+            // Form Submit Mock
             document.getElementById('contact-form').addEventListener('submit', (e) => {
-                e.preventDefault();
-                showToast('Message sent successfully! I will reply soon.');
-                e.target.reset();
+                e.preventDefault(); showToast('This function is just a UI element!'); e.target.reset();
             });
 
-            // Mobile Menu
-            const mobileBtn = document.getElementById('mobile-menu-btn');
-            const closeBtn = document.getElementById('close-menu-btn');
-            const mobileMenu = document.getElementById('mobile-menu');
-            
-            mobileBtn.addEventListener('click', () => mobileMenu.classList.remove('translate-y-full'));
-            closeBtn.addEventListener('click', () => mobileMenu.classList.add('translate-y-full'));
-            document.querySelectorAll('.mobile-link').forEach(l => l.addEventListener('click', () => mobileMenu.classList.add('translate-y-full')));
+            const tInput = document.getElementById('terminal-input');
+            const tOutput = document.getElementById('terminal-output');
+            const tBody = document.getElementById('terminal-body');
 
-            // Accordion Logic
-            document.querySelectorAll('.accordion-item').forEach(item => {
-                const btn = item.querySelector('.accordion-btn');
-                const content = item.querySelector('.accordion-content');
-                const icon = item.querySelector('.accordion-icon');
-                
-                btn.addEventListener('click', () => {
-                    const isOpen = content.style.height && content.style.height !== '0px';
-                    
-                    // Close all others
-                    document.querySelectorAll('.accordion-content').forEach(c => { c.style.height = '0px'; });
-                    document.querySelectorAll('.accordion-icon').forEach(i => { i.style.transform = 'rotate(0deg)'; });
-                    
-                    if (!isOpen) {
-                        content.style.height = content.scrollHeight + 'px';
-                        icon.style.transform = 'rotate(45deg)';
-                    }
-                });
-            });
-
-            const terminalInput = document.getElementById('terminal-input');
-            const terminalOutput = document.getElementById('terminal-output');
-            const terminalBody = document.getElementById('terminal-body');
-
-            const commands = {
-                help: "Available commands:<br> - <span class='text-indigo-400'>whoami</span> : Display user info<br> - <span class='text-indigo-400'>skills</span> : List technical skills<br> - <span class='text-indigo-400'>repo</span> : Link to GitHub<br> - <span class='text-indigo-400'>clear</span> : Clear terminal",
-                whoami: "Amithrosky. Student. Developer. Tinkerer. Trying to make machines do cool things.",
-                skills: "> Python [100%]<br>> HTML/CSS/JS [95%]<br>> Kotlin [60%]<br>> UI/UX [85%]",
-                repo: "Redirecting to GitHub...",
-                sudo: "<span class='text-red-500'>Nice try. This incident will be reported.</span>"
+            const cmds = {
+                help: "Commands:<br>> <span class='text-indigo-400'>whoami</span><br>> <span class='text-indigo-400'>skills</span><br>> <span class='text-indigo-400'>projects</span><br>> <span class='text-indigo-400'>contact</span><br>> <span class='text-indigo-400'>socials</span><br>> <span class='text-indigo-400'>date</span><br>> <span class='text-indigo-400'>clear</span>",
+                whoami: "Amithrosky. Visionary Student & Full-Stack Developer.",
+                skills: "Python [||||||||||] 100%<br>HTML/JS [||||||||| ] 100%<br>Kotlin  [||||||    ] 60%",
+                projects: "1. Compile Studio (Web IDE)<br>2. FiCode (Learning Platform)<br>3. EagSec (Cybersecurity Script)",
+                socials: "Found at left sidebar. Github, X, Insta.",
+                contact: "Fill the form adjacent to this terminal.",
+                sudo: "<span class='text-red-500'>Access Denied. This incident will be logged.</span>"
             };
 
-            terminalInput.addEventListener('keydown', (e) => {
+            tInput.addEventListener('keydown', (e) => {
                 if (e.key === 'Enter') {
-                    const val = terminalInput.value.trim().toLowerCase();
-                    terminalInput.value = '';
+                    const v = tInput.value.trim().toLowerCase();
+                    tInput.value = '';
                     
-                    // Echo command
                     const line = document.createElement('div');
-                    line.innerHTML = `<span class="text-green-400">guest@amithrosky</span><span class="text-white">:</span><span class="text-blue-400">~</span><span class="text-white">$</span> ${val}`;
-                    terminalOutput.appendChild(line);
+                    line.innerHTML = `<span class="text-green-400">guest</span><span class="text-white">:</span><span class="text-blue-400">~</span><span class="text-white">$</span> ${v}`;
+                    tOutput.appendChild(line);
 
-                    // Response
-                    if (val === 'clear') {
-                        terminalOutput.innerHTML = '';
-                    } else if (val) {
-                        const response = document.createElement('div');
-                        response.className = 'mb-2 mt-1';
-                        if (commands[val]) {
-                            response.innerHTML = commands[val];
-                            if(val === 'repo') setTimeout(() => window.open('https://github.com/amithrosky', '_blank'), 1000);
-                        } else {
-                            response.innerHTML = `Command not found: ${val}. Type 'help' for available commands.`;
-                        }
-                        terminalOutput.appendChild(response);
+                    if (v === 'clear') { tOutput.innerHTML = ''; }
+                    else if(v.startsWith('echo ')) {
+                        const r = document.createElement('div'); r.className = 'mb-2 mt-1 text-gray-300'; r.innerText = v.substring(5); tOutput.appendChild(r);
                     }
-                    terminalBody.scrollTop = terminalBody.scrollHeight;
+                    else if(v === 'date') {
+                        const r = document.createElement('div'); r.className = 'mb-2 mt-1 text-gray-300'; r.innerText = new Date().toString(); tOutput.appendChild(r);
+                    }
+                    else if (v) {
+                        const r = document.createElement('div');
+                        r.className = 'mb-2 mt-1 text-gray-300';
+                        r.innerHTML = cmds[v] ? cmds[v] : `Command not found: ${v}. Type 'help'.`;
+                        tOutput.appendChild(r);
+                        if(v==='contact') document.getElementById('name').focus();
+                    }
+                    tBody.scrollTop = tBody.scrollHeight;
                 }
             });
-
-            // Terminal focus area
-            document.querySelector('.terminal-window').addEventListener('click', () => terminalInput.focus());
+            document.querySelector('.terminal-window').addEventListener('click', () => tInput.focus());
 
             const initThreeJS = () => {
                 const container = document.getElementById('webgl-container');
@@ -1121,87 +962,72 @@
                 renderer.setPixelRatio(window.devicePixelRatio);
                 container.appendChild(renderer.domElement);
 
-                // Particles
-                const particlesGeometry = new THREE.BufferGeometry();
-                const particlesCount = 700;
-                const posArray = new Float32Array(particlesCount * 3);
+                const geo = new THREE.BufferGeometry();
+                const count = 600;
+                const pos = new Float32Array(count * 3);
 
-                for(let i = 0; i < particlesCount * 3; i++) {
-                    posArray[i] = (Math.random() - 0.5) * 10;
-                }
-
-                particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+                for(let i = 0; i < count * 3; i++) pos[i] = (Math.random() - 0.5) * 12;
+                geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
                 
-                // Use a soft, additive blending material
-                const particlesMaterial = new THREE.PointsMaterial({
-                    size: 0.015,
-                    color: 0x6366f1, // Indigo 500 base
-                    transparent: true,
-                    opacity: 0.6,
-                    blending: THREE.AdditiveBlending
+                const mat = new THREE.PointsMaterial({
+                    size: 0.02, color: 0x6366f1, transparent: true, opacity: 0.6, blending: THREE.AdditiveBlending
                 });
 
-                const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
-                scene.add(particlesMesh);
-
+                const mesh = new THREE.Points(geo, mat);
+                scene.add(mesh);
                 camera.position.z = 3;
 
-                // Mouse interactivity
-                let targetX = 0;
-                let targetY = 0;
-                let scrollY = window.scrollY;
-
-                document.addEventListener('mousemove', (e) => {
-                    targetX = (e.clientX / window.innerWidth) - 0.5;
-                    targetY = (e.clientY / window.innerHeight) - 0.5;
+                let tx = 0, ty = 0, sy = window.scrollY;
+                document.addEventListener('mousemove', e => {
+                    tx = (e.clientX / window.innerWidth) - 0.5;
+                    ty = (e.clientY / window.innerHeight) - 0.5;
                 });
+                window.addEventListener('scroll', () => sy = window.scrollY);
 
-                window.addEventListener('scroll', () => {
-                    scrollY = window.scrollY;
-                });
-
-                // Window Resize
                 window.addEventListener('resize', () => {
                     camera.aspect = window.innerWidth / window.innerHeight;
                     camera.updateProjectionMatrix();
                     renderer.setSize(window.innerWidth, window.innerHeight);
                 });
 
-                // Animation Loop
                 const clock = new THREE.Clock();
                 const animate = () => {
-                    const elapsedTime = clock.getElapsedTime();
-                    
-                    // Slow idle rotation
-                    particlesMesh.rotation.y = elapsedTime * 0.05;
-                    particlesMesh.rotation.x = elapsedTime * 0.02;
+                    const et = clock.getElapsedTime();
+                    mesh.rotation.y = et * 0.05 + (tx * 0.5);
+                    mesh.rotation.x = et * 0.02 + (ty * 0.5);
+                    camera.position.y = -(sy * 0.0005); // softer scroll
 
-                    // Mouse parallax (smooth delay)
-                    particlesMesh.rotation.y += 0.5 * (targetX - particlesMesh.rotation.y);
-                    particlesMesh.rotation.x += 0.5 * (targetY - particlesMesh.rotation.x);
-                    
-                    // Scroll effect (move camera down relative to particles)
-                    camera.position.y = -(scrollY * 0.001);
-
-                    // Update color based on theme (read CSS var implicitly)
-                    const computedStyle = getComputedStyle(document.body);
-                    const accentColor = computedStyle.getPropertyValue('--accent-primary').trim();
-                    if(accentColor) {
-                        particlesMaterial.color.setStyle(accentColor);
-                    }
+                    // dynamic color parsing
+                    const style = getComputedStyle(document.body);
+                    const ac = style.getPropertyValue('--accent-primary').trim();
+                    if(ac && ac.startsWith('#')) mat.color.setStyle(ac);
 
                     renderer.render(scene, camera);
                     requestAnimationFrame(animate);
                 };
-
                 animate();
             };
             
-            // Wait for Window Load to start heavy 3D rendering
-            window.onload = () => {
-                initThreeJS();
-            };
+            window.onload = () => initThreeJS();
         });
+document.addEventListener('keydown', function(event) {
+  // Prevent F12
+  if (event.key === 'F12') {
+    event.preventDefault();
+  }
+  // Prevent Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C
+  if (event.ctrlKey && event.shiftKey && (event.key === 'I' || event.key === 'J' || event.key === 'C')) {
+    event.preventDefault();
+  }
+  // Prevent Ctrl+U (View Source)
+  if (event.ctrlKey && event.key === 'u') {
+    event.preventDefault();
+  }
+});
+ // Block right-click context menu
+  document.addEventListener('contextmenu', (event) => {
+    event.preventDefault();
+  });
     </script>
 </body>
 </html>
